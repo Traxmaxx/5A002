@@ -1,7 +1,7 @@
 <div class="hero-unit">
     <h1>CESA <small data-ng-show="currentUser">Hej {{currentUser}} <a href="#" data-ng-click="logout()">Logout</a></small></h1>
 
-    <div data-ng-hide="currentUser">
+    <div data-ng-hide="currentUser" class="login">
     <form ng-submit="login()">
         <input type="text" data-ng-model="username" required placeholder="Username">
         <input type="password" data-ng-model="passphrase" required placeholder="Password">

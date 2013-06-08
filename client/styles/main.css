@@ -89,3 +89,14 @@ h1 small {
 .chat-wrapper .messages li {
   margin: 0 0 5px 0;
 }
+
+
+.login {
+  background: #32393b;
+  display: block;
+  padding: 10px;
+  position: fixed;
+  z-index: 2;
+  max-width: 300px;
+  width: 100%;
+}
