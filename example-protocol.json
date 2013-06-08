@@ -6,43 +6,43 @@
   "pubkey": "wKGJJtQWJw5RfWmPKLzjnu80e...etc"
 }
 
-<- event "loginreply"
+<- event "login:reply"
 {
   "status": "ok",
   "clientlist": {
-    "anilsson" {
+    "anilsson": {
       "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc"
     },
-    "vili" {
+    "vili": {
       "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc"
     },
-    "hgschmidt" {
+    "hgschmidt": {
       "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc"
     }
   }
 }
 
--> event "sendmessage"
+-> event "send:message"
 {
   "id": 1,
   "recipient": "anilsson",
   "data": "base64 encoded encrypted message",
 }
 
-<- event "sendmessagereply"
+<- event "send:messagereply"
 {
   "id": 1,
   "status": "delivered"
 }
 
-<- event "recievemessage"
+<- event "recieve:message"
 {
   "id": 1,
   "sender": "anilsson",
   "data": "base64 encoded encrypted message",
 }
 
-<- event "clientupdate"
+<- event "client:update"
 {
   "anilsson": {
     "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc", // mandatory
@@ -50,7 +50,7 @@
   }
 }
 
-<- event "clientupate"
+<- event "client:update"
 {
   "anilsson": {
     "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc", // offline
