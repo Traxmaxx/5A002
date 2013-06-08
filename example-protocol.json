@@ -1,0 +1,59 @@
+# Generate keys (initialize() function I guess)
+
+-> event "login"
+{
+  "username": "traxmaxx",
+  "pubkey": "wKGJJtQWJw5RfWmPKLzjnu80e...etc"
+}
+
+<- event "login:reply"
+{
+  "status": "ok",
+  "clientlist": {
+    "anilsson": {
+      "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc"
+    },
+    "vili": {
+      "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc"
+    },
+    "hgschmidt": {
+      "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc"
+    }
+  }
+}
+
+-> event "send:message"
+{
+  "id": 1,
+  "recipient": "anilsson",
+  "data": "base64 encoded encrypted message",
+}
+
+<- event "send:messagereply"
+{
+  "id": 1,
+  "status": "delivered"
+}
+
+<- event "recieve:message"
+{
+  "id": 1,
+  "sender": "anilsson",
+  "data": "base64 encoded encrypted message",
+}
+
+<- event "client:update"
+{
+  "anilsson": {
+    "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc", // mandatory
+    "status": "online"
+  }
+}
+
+<- event "client:update"
+{
+  "anilsson": {
+    "pubkey": "GJJtQWJw5RfWmPKLzjnu...etc", // offline
+    "status": "offline"
+  }
+}
