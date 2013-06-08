@@ -40,6 +40,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             text: $scope.text
         });
 
+        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         $scope.text = '';
     };
 
@@ -83,6 +84,8 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             user: 'invalid sender (not in list)!',
             text: decryptedtext.plaintext
         });
+
+        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
     });
 
     socket.on('client:update', function (data) {

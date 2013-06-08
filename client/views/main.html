@@ -12,16 +12,16 @@
     <div data-ng-show="currentUser" class="chat-wrapper">
         <h2>Messages</h2>
         <form ng-submit="sendMessage()">
-            <textarea placeholder="lalala" data-ng-model="text"></textarea>
-            <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients"></select>
-            <input type="submit"/>
+            <textarea placeholder="lalala" data-ng-model="text" rows="20" cols="10"></textarea>
+            <div class="contact-action">
+                <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients"></select>
+                <input type="submit"/>
+            </div>
         </form>
 
 
-        <ul>
+        <ul class="messages" id="messages">
             <li data-ng-repeat="message in messages">{{message.user}}: {{message.text}} </li>
         </ul>
     </div>
-
-
 </div>
