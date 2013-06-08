@@ -101,21 +101,21 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         for (var key in orig_list) {
             if (!(key in updated_list)) {
                 $scope.messages.push({
-                    user: key + ' - user logged out',
-                    text: ''
+                    user: key,
+                    text: '[user logged out]'
                 });
             } else if (orig_list[key].pubkey != updated_list[key].pubkey) {
                 $scope.messages.push({
-                    user: key + ' - user changed key',
-                    text: ''
+                    user: key,
+                    text: '[user changed key]'
                 });
             }
         }
         for (var key in updated_list) {
             if (!(key in orig_list)) {
                 $scope.messages.push({
-                    user: key + ' - user logged in',
-                    text: ''
+                    user: key,
+                    text: '[user logged in]'
                 });
             }
         }
