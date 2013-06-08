@@ -45,7 +45,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     };
 
     socket.on('login:reply', function (data) {
-        $scope.clients.push(data.clientlist[0]);
+        $scope.clients = data.clientlist;
     });
 
     socket.on('news', function (data) {
