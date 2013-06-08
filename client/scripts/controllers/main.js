@@ -86,6 +86,16 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('client:update', function (data) {
+        var updated_list = {}
+        for (var i = 0; i < data.clientlist.length; i++)
+            updated_list[data.clientlist[i].username] =
+            for (var j = 0; j < $scope.clients.length; j++) {
+                if (
+            if (data.clientlist[i].
+
+            if ($scope.clients[i].username == data.sender) {
+                if ($scope.clients[i].pubkey != decryptedtext.publicKeyString) {
+        }
       $scope.clients = data.clientlist;
     });
 
