@@ -57,7 +57,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             rsa = rsaObj.parse(localStorageService.load('rsa'));
         $scope.messages.push({
             user: data.sender,
-            text: cryptico.decrypt(data.message, rsa)
+            text: cryptico.decrypt(data.message, rsa).plaintext
         });
     });
 
