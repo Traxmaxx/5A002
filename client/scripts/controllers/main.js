@@ -4,7 +4,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     $scope.messages = [];
     $scope.clients = [];
     $scope.currentUser = localStorageService.load('username');
-    $scope.bitLength = 1024
+    $scope.bitLength = 512
 
     var connectSocket = function () {
         socket.emit('login', {
