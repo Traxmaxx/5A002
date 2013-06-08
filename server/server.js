@@ -59,12 +59,6 @@ io.sockets.on('connection', function (socket) {
       clientlist: client_list
     });
 
-    // Build client update object
-    /*var client_update = {
-      username: data.username,
-      pubkey: data.pubkey
-    };*/
-
     client_list2 = {};
     client_list2.clientlist = buildClientList();
 
