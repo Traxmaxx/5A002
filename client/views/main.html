@@ -12,9 +12,10 @@
     <div data-ng-show="currentUser" class="chat-wrapper">
         <h2>Messages</h2>
         <form ng-submit="sendMessage()">
-            <textarea placeholder="lalala" data-ng-model="text" rows="20" cols="10"></textarea>
+            <textarea placeholder="lalala" data-ng-model="text" rows="20" cols="10" required></textarea>
             <div class="contact-action">
-                <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients"></select>
+                <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients" required>
+                    <option value="">Select a Recipient</option></select>
                 <input type="submit"/>
             </div>
         </form>
