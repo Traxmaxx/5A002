@@ -124,10 +124,18 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('client:add', function (data) {
+        $scope.messages.push({
+            user: 'Warning',
+            text: 'server sent client:add'
+        });
         $scope.clients.push(data);
     });
 
     socket.on('client:remove', function (data) {
+        $scope.messages.push({
+            user: 'Warning',
+            text: 'server sent client:remove'
+        });
         $scope.clients.splice($scope.clients.indexOf(data), 1);
     });
 
