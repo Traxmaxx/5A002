@@ -1,12 +1,55 @@
 'use strict';
 
-angular.module('battlehackChatApp')
-  .controller('MainCtrl', function ($scope, socket, localStorageService) {
+app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     $scope.messages = [];
+    $scope.clients = [];
     $scope.currentUser = localStorageService.load('username');
 
+    var connectSocket = function () {
+        socket.emit('login', {
+            username: localStorageService.load('username'),
+            pubkey: cryptico.publicKeyString(localStorageService.load('rsa'))
+        });
+    };
+
+    $scope.login = function () {
+        localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, '512'));
+        localStorageService.save('username', $scope.username);
+        $scope.currentUser = $scope.username;
+        connectSocket();
+    };
+
+    $scope.logout = function () {
+        localStorageService.destroy('username');
+        localStorageService.destroy('rsa');
+        $scope.currentUser = null;
+    };
+
+    $scope.sendMessage = function () {
+        var rsa = localStorageService.load('rsa')
+        console.log(rsa);
+        var publicKey = cryptico.publicKeyString(rsa);
+        console.log(publicKey);
+        var encryptedMessage = cryptico.encrypt($scope.message, publicKey);
+        console.log(encryptedMessage);
+//
+//        socket.emit('send:message', {
+//            recipient: $scope.recipient,
+//            message: encryptedMessage.cipher
+//        });
+//
+//        // add the message to our model locally
+//        $scope.messages.push({
+//            user: $scope.currentUser,
+//            text: cryptico.decrypt(encryptedMessage.cipher, localStorageService.load('rsa'))
+//        });
+//
+//        // clear message box
+//        $scope.message = '';
+    };
+
     socket.on('login:reply', function (data) {
-        console.log(data);
+        $scope.clients.push(data.clientlist);
     });
 
     socket.on('news', function (data) {
@@ -25,38 +68,7 @@ angular.module('battlehackChatApp')
         console.log(data);
     });
 
-    $scope.login = function () {
-        localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, '512'));
-        localStorageService.save('username', $scope.username);
-        $scope.currentUser = $scope.username;
-
-        socket.emit('login', {
-            username: localStorageService.load('username'),
-            pubkey: cryptico.publicKeyString(localStorageService.load('rsa'))
-        });
+    if ($scope.currentUser) {
+        connectSocket();
     }
-
-    $scope.logout = function () {
-        localStorageService.destroy('username');
-        localStorageService.destroy('rsa');
-        $scope.currentUser = null;
-    }
-
-    $scope.sendMessage = function () {
-        //console.log('yay');
-        socket.emit('send:message', {
-            user: localStorageService.load('username'),
-            message: $scope.message
-        });
-
-        // add the message to our model locally
-        $scope.messages.push({
-          user: $scope.name,
-          text: $scope.message
-        });
-
-        // clear message box
-        $scope.message = '';
-    };
-
-  });
+});
