@@ -52,13 +52,13 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('recieve:message', function (data) {
+        console.log(data);
         var rsaObj = cryptico.generateRSAKey('', 512),
             rsa = rsaObj.parse(localStorageService.load('rsa'));
         $scope.messages.push({
             user: data.sender,
             text: cryptico.decrypt(data.message, rsa)
         });
-        console.log(data);
     });
 
     socket.on('client:update', function (data) {
