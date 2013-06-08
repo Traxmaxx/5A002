@@ -90,17 +90,29 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('client:update', function (data) {
+        // First we check if a user has logged out or changed its key
+        var orig_list = {}
+        for (var i = 0; i < $scope.clients.length; i++)
+            orig_list[$scope.clients[i].username] = $scope.clients[i].pubkey;
         var updated_list = {}
         for (var i = 0; i < data.clientlist.length; i++)
-            updated_list[data.clientlist[i].username] =
-            for (var j = 0; j < $scope.clients.length; j++) {
-                if (
-            if (data.clientlist[i].
-
-            if ($scope.clients[i].username == data.sender) {
-                if ($scope.clients[i].pubkey != decryptedtext.publicKeyString) {
+            updated_list[data.clientlist[i].username] = data.clientlist[i].pubkey;
+        for (var key in orig_list) {
+            if (!(key in updated_list)) {
+                $scope.messages.push({
+                    user: key + ' - user logged out',
+                    text: ''
+                });
+                delete updated_list[key];
+            } else if (orig_list[key].pubkey != updated_list[key].pubkey) {
+                $scope.messages.push({
+                    user: key + ' - user changed key',
+                    text: ''
+                });
+            }
         }
-      $scope.clients = data.clientlist;
+
+        $scope.clients = data.clientlist;
     });
 
     socket.on('client:add', function (data) {
