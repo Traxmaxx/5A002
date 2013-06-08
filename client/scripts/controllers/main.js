@@ -40,6 +40,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             text: $scope.text
         });
 
+        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         $scope.text = '';
     };
 
@@ -60,9 +61,10 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         var decryptedtext = cryptico.decrypt(data.message, rsa);
-        for (var i = 0; i < $scope.clients.length; i++) {
-            if ($scope.clients[i].username == data.sender) {
-                if ($scope.clients[i].pubkey != decryptedtext.publicKeyString) {
+        var length = $scope.clients.length;
+        while (length--) {
+            if ($scope.clients[length].username == data.sender) {
+                if ($scope.clients[length].pubkey != decryptedtext.publicKeyString) {
                     $scope.messages.push({
                         user: data.sender + ' - invalid signature ' +
                         '(verification failed)!',
@@ -83,6 +85,8 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             user: 'invalid sender (not in list)!',
             text: decryptedtext.plaintext
         });
+
+        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
     });
 
     socket.on('client:update', function (data) {

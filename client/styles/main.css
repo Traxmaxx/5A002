@@ -10,18 +10,24 @@ body {
   line-height: 1.6rem;
   margin: 0 auto;
   max-width: 960px;
-  padding: 0 10px;
   width: 100%;
 }
 a, a:visited {
   color: #ccc;
 }
 h1 {
+  background: #292f31;
   border-bottom: 1px solid #474d4f;
   color: #fff;
   font-family: 'Lato', sans-serif;
   font-size: 3rem;
   line-height: 4rem;
+  margin: 0px;
+  padding: 20px 10px;
+  position: absolute;
+  width: 100%;
+  max-width: 960px;
+  z-index: 2;
 }
 h2 {
   color: #fff;
@@ -36,5 +42,50 @@ h1 small {
 }
 .chat-wrapper {
   background: #32393b;
-  padding: 10px;
+  height: 100%;
+  max-width: 960px;
+  padding: 91px 10px 0 10px;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+}
+.chat-wrapper form {
+  background: #32393b;
+  bottom: 0px;
+  height: 60px;
+  padding: 0 0 10px 0;
+  position: absolute;
+  width: 100%;
+}
+.chat-wrapper textarea {
+  width: 65%;
+  height: 100%;
+  border: 3px solid #cccccc;
+  padding: 5px;
+}
+.chat-wrapper .contact-action {
+  display: inline-block;
+  height: 100%;
+  position: relative;
+  width: 30%;
+}
+.chat-wrapper .contact-action select {
+  display: block;
+  width: 100%;
+}
+.chat-wrapper .contact-action input {
+  left: 0px;
+  position: absolute;
+  bottom: 0px;
+}
+
+.chat-wrapper .messages {
+  color: #ccc;
+  height: 100%;
+  list-style: inside none;
+  overflow: auto;
+  padding: 0 0 120px 0;
+}
+.chat-wrapper .messages li {
+  margin: 0 0 5px 0;
 }
