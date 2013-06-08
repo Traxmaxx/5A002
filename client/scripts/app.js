@@ -35,3 +35,9 @@ app.factory('socket', function ($rootScope) {
     }
   };
 });
+
+app.filter('reverse', function() {
+  return function(items) {
+    return items.slice().reverse();
+  };
+});

@@ -38,10 +38,11 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
 
         $scope.messages.push({
             user: $scope.currentUser,
+            recipient: $scope.recipient.username,
             text: $scope.text
         });
 
-        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
+        //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         $scope.text = '';
     };
 
@@ -79,6 +80,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                         '[' +
                         cryptico.publicKeyID($scope.clients[length].pubkey) +
                         ']',
+                        recipient: $scope.currentUser,
                         text: decryptedtext.plaintext
                     });
                     return;
@@ -91,7 +93,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             text: decryptedtext.plaintext
         });
 
-        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
+        //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
     });
 
     socket.on('client:update', function (data) {

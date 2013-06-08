@@ -40,6 +40,57 @@ h1 small {
   float: right;
   font-size: 1.4rem;
 }
+
+
+::-webkit-input-placeholder { /* WebKit browsers */
+  color: #828e94;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: #828e94;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: #828e94;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color: #828e94;
+}
+input {
+  border: 2px solid #ccc;
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+input:focus {
+  border: 2px solid #489dff;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+input[type="submit"] {
+  background: #489dff;
+  border: 1px solid #2f6fb6;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  font-family: 'Lato', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+input[type="submit"]:hover,
+input[type="submit"]:focus {
+  background: #2f6fb6;
+  border: 1px solid #489dff;
+}
+
+
 .chat-wrapper {
   background: #32393b;
   height: 100%;
@@ -52,8 +103,9 @@ h1 small {
 .chat-wrapper form {
   background: #32393b;
   bottom: 0px;
-  height: 60px;
-  padding: 0 0 10px 0;
+  left: 0px;
+  height: 100px;
+  padding: 0 0 10px 10px;
   position: absolute;
   width: 100%;
 }
@@ -84,7 +136,7 @@ h1 small {
   height: 100%;
   list-style: inside none;
   overflow: auto;
-  padding: 0 0 120px 0;
+  padding: 0 0 160px 0;
 }
 .chat-wrapper .messages li {
   margin: 0 0 5px 0;
@@ -94,9 +146,17 @@ h1 small {
 .login {
   background: #32393b;
   display: block;
+  margin: 0 auto;
+  max-width: 960px;
   padding: 10px;
-  position: fixed;
-  z-index: 2;
-  max-width: 300px;
+  position: absolute;
+  top: 91px;
   width: 100%;
+  z-index: 2;
+}
+.login input {
+  display: block;
+  margin: 10px auto;
+  padding: 5px 10px;
+  width: 100px;
 }
