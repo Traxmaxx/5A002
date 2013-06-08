@@ -27,10 +27,12 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     };
 
     $scope.sendMessage = function () {
+        var rsaObj = cryptico.generateRSAKey('', 512),
+        rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         socket.emit('send:message', {
             recipient: $scope.recipient,
-            message: cryptico.encrypt($scope.text, $scope.recipient.pubkey).cipher
+            message: cryptico.encrypt($scope.text, $scope.recipient.pubkey, rsa).cipher
         });
 
         $scope.messages.push({
@@ -56,9 +58,30 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     socket.on('recieve:message', function (data) {
         var rsaObj = cryptico.generateRSAKey('', 512),
             rsa = rsaObj.parse(localStorageService.load('rsa'));
+
+        var decryptedtext = cryptico.decrypt(data.message, rsa);
+        for (var i = 0; i < $scope.clients.length; i++) {
+            if ($scope.clients[i].username == data.sender) {
+                if ($scope.clients[i].pubkey != decryptedtext.publicKeyString) {
+                    $scope.messages.push({
+                        user: data.sender + ' - invalid signature ' +
+                        '(verification failed)!',
+                        text: decryptedtext.plaintext
+                    });
+                    return;
+                } else {
+                    $scope.messages.push({
+                        user: data.sender,
+                        text: decryptedtext.plaintext
+                    });
+                    return;
+                }
+            }
+        }
+
         $scope.messages.push({
-            user: data.sender,
-            text: cryptico.decrypt(data.message, rsa).plaintext
+            user: 'invalid sender (not in list)!',
+            text: decryptedtext.plaintext
         });
     });
 
