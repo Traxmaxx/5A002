@@ -13,7 +13,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     };
 
     $scope.login = function () {
-        localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, '512'));
+        localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, 512));
         localStorageService.save('username', $scope.username);
         $scope.currentUser = $scope.username;
         connectSocket();
