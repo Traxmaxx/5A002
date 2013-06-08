@@ -3,6 +3,7 @@
 angular.module('battlehackChatApp')
   .controller('MainCtrl', function ($scope, socket) {
     $scope.name = 'Alex';
+    $scope.message = 'Testmessage';
     $scope.messages = [];
 
     socket.on('init', function (data) {
@@ -16,7 +17,7 @@ angular.module('battlehackChatApp')
     });
 
     $scope.sendMessage = function () {
-        console.log('yay');
+        //console.log('yay');
         socket.emit('send:message', {
             user: $scope.name,
             message: $scope.message
@@ -29,7 +30,7 @@ angular.module('battlehackChatApp')
         });
 
         // clear message box
-        $scope.message = 'Testmessage';
+        $scope.message = '';
     };
 
   });

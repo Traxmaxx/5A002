@@ -1,4 +1,8 @@
 <div class="hero-unit" data-ng-controller="MainCtrl">
   <h1>Awesome client-to-client encryption shit</h1>
   <span ng-click="sendMessage()">send something</span>
+
+  <ul>
+    <li data-ng-repeat="message in messages">{{message|json}} </li>
+  </ul>
 </div>
