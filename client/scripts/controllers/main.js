@@ -104,7 +104,6 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                     user: key + ' - user logged out',
                     text: ''
                 });
-                delete updated_list[key];
             } else if (orig_list[key].pubkey != updated_list[key].pubkey) {
                 $scope.messages.push({
                     user: key + ' - user changed key',
