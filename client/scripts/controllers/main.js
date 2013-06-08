@@ -62,8 +62,12 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         });
     });
 
+    socket.on('client:update', function (data) {
+      $scope.clients = data.clientlist[0];
+    });
+
     socket.on('client:add', function (data) {
-        $scope.clients.push(data);
+      $scope.clients.push(data);
     });
 
     socket.on('client:remove', function (data) {
