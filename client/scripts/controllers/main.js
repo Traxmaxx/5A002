@@ -1,11 +1,9 @@
 'use strict';
 
 angular.module('battlehackChatApp')
-  .controller('MainCtrl', function ($scope, socket) {
-    $scope.name = '';
-    $scope.message = 'Testmessage';
-    $scope.pubkey = 'GJJtQWJw5RfWmPKLzjnu...etc'
+  .controller('MainCtrl', function ($scope, socket, localStorageService) {
     $scope.messages = [];
+    $scope.currentUser = localStorageService.load('username');
 
     socket.on('login:reply', function (data) {
         console.log(data);
@@ -28,16 +26,26 @@ angular.module('battlehackChatApp')
     });
 
     $scope.login = function () {
+        localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, '512'));
+        localStorageService.save('username', $scope.username);
+        $scope.currentUser = $scope.username;
+
         socket.emit('login', {
-            username: $scope.username,
-            pubkey: $scope.pubkey
+            username: localStorageService.load('username'),
+            pubkey: cryptico.publicKeyString(localStorageService.load('rsa'))
         });
+    }
+
+    $scope.logout = function () {
+        localStorageService.destroy('username');
+        localStorageService.destroy('rsa');
+        $scope.currentUser = null;
     }
 
     $scope.sendMessage = function () {
         //console.log('yay');
         socket.emit('send:message', {
-            user: $scope.name,
+            user: localStorageService.load('username'),
             message: $scope.message
         });
 

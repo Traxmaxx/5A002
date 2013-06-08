@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('battlehackChatApp', [])
+var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
