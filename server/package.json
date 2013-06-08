@@ -1,0 +1,9 @@
+{
+  "name" : "5A002",
+  "version" : "0.0.1",
+  "description" : "A Battlehack Chat Server",
+  "main" : "server.js",
+  "dependencies": {
+    "socket.io": "=0.9.16"
+  }
+}
