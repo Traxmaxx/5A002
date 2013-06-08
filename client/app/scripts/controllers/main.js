@@ -2,19 +2,37 @@
 
 angular.module('battlehackChatApp')
   .controller('MainCtrl', function ($scope, socket) {
-    $scope.name = 'Alex';
+    $scope.name = '';
     $scope.message = 'Testmessage';
+    $scope.pubkey = 'GJJtQWJw5RfWmPKLzjnu...etc'
     $scope.messages = [];
 
-    socket.on('init', function (data) {
-        console.log('data');
-        $scope.name = data.name;
-        $scope.users = data.users;
+    socket.on('login:reply', function (data) {
+        console.log(data);
     });
 
     socket.on('news', function (data) {
         console.log(data);
     });
+
+    socket.on('send:messagereply', function (data) {
+        console.log(data);
+    });
+
+    socket.on('recieve:message', function (data) {
+        console.log(data);
+    });
+
+    socket.on('client:update', function (data) {
+        console.log(data);
+    });
+
+    $scope.login = function () {
+        socket.emit('login', {
+            username: $scope.username,
+            pubkey: $scope.pubkey
+        });
+    }
 
     $scope.sendMessage = function () {
         //console.log('yay');
