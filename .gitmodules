@@ -1,0 +1,3 @@
+[submodule "client/cryptico"]
+	path = client/cryptico
+	url = https://github.com/wwwtyro/cryptico.git
