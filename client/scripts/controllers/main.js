@@ -61,9 +61,10 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         var decryptedtext = cryptico.decrypt(data.message, rsa);
-        for (var i = 0; i < $scope.clients.length; i++) {
-            if ($scope.clients[i].username == data.sender) {
-                if ($scope.clients[i].pubkey != decryptedtext.publicKeyString) {
+        var length = $scope.clients.length;
+        while (length--) {
+            if ($scope.clients[length].username == data.sender) {
+                if ($scope.clients[length].pubkey != decryptedtext.publicKeyString) {
                     $scope.messages.push({
                         user: data.sender + ' - invalid signature ' +
                         '(verification failed)!',
