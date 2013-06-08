@@ -4,6 +4,7 @@
   "description" : "A Battlehack Chat Server",
   "main" : "server.js",
   "dependencies": {
-    "socket.io": "=0.9.16"
+    "socket.io": "=0.9.16",
+    "winston": "=0.7.1"
   }
 }
