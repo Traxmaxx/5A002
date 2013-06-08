@@ -147,7 +147,7 @@ function RSAToJSON()
 }
 
 function RSAParse(rsaString) {
-  var json = JSON.parse(rsaString);
+  var json = rsaString;
   var rsa = new RSAKey();
 
   rsa.setPrivateEx(json.n, json.e, json.d, json.p, json.q, json.dmp1, json.dmq1, json.coeff);
@@ -168,7 +168,7 @@ RSAKey.prototype.doPublic = RSADoPublic;
 RSAKey.prototype.setPublic = RSASetPublic;
 RSAKey.prototype.encrypt = RSAEncrypt;
 RSAKey.prototype.toJSON = RSAToJSON;
-RSAKey.parse = RSAParse;
+RSAKey.prototype.parse = RSAParse;
 
 // Version 1.1: support utf-8 decoding in pkcs1unpad2
 // Undo PKCS#1 (type 2, random) padding and, if valid, return the plaintext
