@@ -37,7 +37,7 @@ io.sockets.on('connection', function (socket) {
   });
   socket.on('send:message', function (data) {
     // Build message.
-    msg.sender = socket.get('username', function(err, name) {
+    socket.get('username', function(err, name) {
       var msg = {};
       msg.id = data.id;
       msg.sender = name;
