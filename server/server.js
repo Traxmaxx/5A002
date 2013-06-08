@@ -5,14 +5,18 @@ io.sockets.on('connection', function (socket) {
     socket.set('username', data.username);
     socket.set('pubkey', data.pubkey);
 
-    // Build client list
+    // Build client list. Callback soup. Here be dragons.
     var client_list = {};
-    for (var key in io.sockets) {
-      if (io.sockets[key].get('username') != data.username) {
-        client_list[data.username] = {
-          pubkey: io.sockets[key].get('pubkey')
-        };
-      }
+    for (var key in io.sockets.sockets) {
+      io.sockets.sockets[key].get('username', function(err, name) {
+        if (name != data.username) {
+          io.sockets.sockets[key].get('username', function(err, key) {
+            client_list[data.username] = {
+              pubkey: key
+            };
+          });
+        }
+      });
     }
 
     // Send login success, because it will always succeed.
@@ -32,18 +36,21 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('client:update', client_update);
   });
   socket.on('send:message', function (data) {
-    // Build message
-    var msg = {};
-    msg.id = data.id;
-    msg.sender = socket.get('username');
-    msg.data = data.data;
-
-    // Send message 
-    for (var key in io.sockets) {
-      if (io.sockets[key].get('username') == data.recipient) {
-        io.sockets[key].emit('recieve:message', msg);
+    // Build message.
+    socket.get('username', function(err, name) {
+      var msg = {};
+      msg.id = data.id;
+      msg.sender = name;
+      msg.data = data.data;
+      // Send message. Callback soup. Here be dragons.
+      for (var key in io.sockets.sockets) {
+        io.sockets.sockets[key].get('username', function(err, name) {
+          if (name == data.username) {
+            io.sockets.sockets[key].emit('recieve:message', msg);
+          }
+        });
       }
-    }
+    });
 
     // Send message status
     socket.emit('send:message', {
