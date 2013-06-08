@@ -26,25 +26,21 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     };
 
     $scope.sendMessage = function () {
-        var rsaObj = cryptico.generateRSAKey('', 512),
-            rsa = rsaObj.parse(localStorageService.load('rsa')),
-            publicKey = cryptico.publicKeyString(rsa),
-            encryptedMessage = cryptico.encrypt($scope.text, publicKey);
 
         socket.emit('send:message', {
             recipient: $scope.recipient,
-            message: encryptedMessage.cipher
+            message: cryptico.encrypt($scope.text, $scope.recipient.pubkey)
         });
 
         $scope.messages.push({
             user: $scope.currentUser,
-            text: cryptico.decrypt(encryptedMessage.cipher, rsa).plaintext
+            text: $scope.text
         });
         $scope.text = '';
     };
 
     socket.on('login:reply', function (data) {
-        $scope.clients.push(data.clientlist);
+        $scope.clients.push(data.clientlist[0]);
     });
 
     socket.on('news', function (data) {
@@ -56,13 +52,20 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('recieve:message', function (data) {
+        var rsaObj = cryptico.generateRSAKey('', 512),
+            rsa = rsaObj.parse(localStorageService.load('rsa'));
+        $scope.messages.push({
+            user: data.sender,
+            text: cryptico.decrypt(data.message, rsa)
+        });
         console.log(data);
     });
 
     socket.on('client:update', function (data) {
-        console.log(data);
+        $scope.clients.push(data);
     });
 
+    //Connect on load if already loggedin
     if ($scope.currentUser) {
         connectSocket();
     }

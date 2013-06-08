@@ -14,7 +14,7 @@
 
         <form ng-submit="sendMessage()">
             <textarea placeholder="lalala" data-ng-model="text"></textarea>
-            <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients[0]"></select>
+            <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients"></select>
             <input type="submit"/>
         </form>
 
