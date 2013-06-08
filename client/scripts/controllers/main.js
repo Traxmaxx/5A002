@@ -4,6 +4,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     $scope.messages = [];
     $scope.clients = [];
     $scope.currentUser = localStorageService.load('username');
+    $scope.bitLength = 1024
 
     var connectSocket = function () {
         socket.emit('login', {
@@ -14,7 +15,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
 
     $scope.login = function () {
         $scope.currentUser = $scope.username;
-        localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, 512).toJSON());
+        localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, $scope.bitLength).toJSON());
         localStorageService.save('username', $scope.username);
         connectSocket();
     };
@@ -27,7 +28,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     };
 
     $scope.sendMessage = function () {
-        var rsaObj = cryptico.generateRSAKey('', 512),
+        var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
         rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         socket.emit('send:message', {
@@ -57,7 +58,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('recieve:message', function (data) {
-        var rsaObj = cryptico.generateRSAKey('', 512),
+        var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
             rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         var decryptedtext = cryptico.decrypt(data.message, rsa);
