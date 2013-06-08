@@ -23,6 +23,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         localStorageService.destroy('username');
         localStorageService.destroy('rsa');
         $scope.currentUser = null;
+        socket.emit('logout', 'do it now!');
     };
 
     $scope.sendMessage = function () {
@@ -66,7 +67,8 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('client:remove', function (data) {
-      $scope.clients.splice($scope.clients.indexOf(data), 1);
+        console.log('logout');
+        $scope.clients.splice($scope.clients.indexOf(data), 1);
     });
 
 
