@@ -7,7 +7,6 @@ var clients = {};
 io.sockets.on('connection', function (socket) {
   // Recieve a login
   socket.on('login', function (data) {
-    //console.log("login: " + JSON.stringify(data));
 
     // Check if the username exists
     for (var key in clients) {
@@ -44,14 +43,13 @@ io.sockets.on('connection', function (socket) {
     // Build client update object
     var client_update = {
       username: data.username,
-      pubkey: data.pubkey,
-      status: "online"
+      pubkey: data.pubkey
     };
 
     console.log("'" + data.username + "' logged in.");
 
     // Broadcast the new client
-    socket.broadcast.emit('client:update', client_update);
+    socket.broadcast.emit('client:add', client_update);
   });
 
   // Recieve a message
@@ -82,6 +80,30 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function() {
     if (clients[socket.id] !== undefined) {
       console.log("'" + clients[socket.id].username + "' logged out.");
+
+      // Build client update object
+      var client_update = {
+        username: clients[socket.id].username,
+        pubkey: clients[socket.id].pubkey
+      };
+
+      socket.broadcast.emit('client:remove', client_update);
+    }
+    delete clients[socket.id];
+  });
+
+  // delete the client when it disconnects
+  socket.on('logout', function(derp) {
+    if (clients[socket.id] !== undefined) {
+      console.log("'" + clients[socket.id].username + "' logged out.");
+
+      // Build client update object
+      var client_update = {
+        username: clients[socket.id].username,
+        pubkey: clients[socket.id].pubkey
+      };
+
+      socket.broadcast.emit('client:remove', client_update);
     }
     delete clients[socket.id];
   });
