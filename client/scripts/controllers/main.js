@@ -27,25 +27,22 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
 
     $scope.sendMessage = function () {
         var rsa = localStorageService.load('rsa')
-        console.log(rsa);
         var publicKey = cryptico.publicKeyString(rsa);
-        console.log(publicKey);
         var encryptedMessage = cryptico.encrypt($scope.message, publicKey);
-        console.log(encryptedMessage);
+
+        socket.emit('send:message', {
+            recipient: $scope.recipient,
+            message: encryptedMessage.cipher
+        });
 //
-//        socket.emit('send:message', {
-//            recipient: $scope.recipient,
-//            message: encryptedMessage.cipher
-//        });
-//
-//        // add the message to our model locally
-//        $scope.messages.push({
-//            user: $scope.currentUser,
-//            text: cryptico.decrypt(encryptedMessage.cipher, localStorageService.load('rsa'))
-//        });
-//
-//        // clear message box
-//        $scope.message = '';
+        // add the message to our model locally
+        $scope.messages.push({
+            user: $scope.currentUser,
+            text: cryptico.decrypt(encryptedMessage.cipher, localStorageService.load('rsa'))
+        });
+
+        // clear message box
+        $scope.message = '';
     };
 
     socket.on('login:reply', function (data) {

@@ -12,9 +12,8 @@
     <div data-ng-show="currentUser">
         <h2>Hello {{currentUser}} <a href="#" data-ng-click="logout()">Logout</a></h2>
         <textarea placeholder="lalala" data-ng-model="message"></textarea>
-        <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c for c in clients"></select>
+        <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients[0]"></select>
     <a href="#" ng-click="sendMessage()">send something</a>
-
     <h4>Messages</h4>
     <ul>
         <li data-ng-repeat="message in messages">{{message|json}} </li>
