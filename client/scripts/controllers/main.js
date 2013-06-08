@@ -13,9 +13,9 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     };
 
     $scope.login = function () {
+        $scope.currentUser = $scope.username;
         localStorageService.save('rsa', cryptico.generateRSAKey($scope.passphrase, 512).toJSON());
         localStorageService.save('username', $scope.username);
-        $scope.currentUser = $scope.username;
         connectSocket();
     };
 
@@ -37,6 +37,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             user: $scope.currentUser,
             text: $scope.text
         });
+
         $scope.text = '';
     };
 
@@ -53,7 +54,6 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('recieve:message', function (data) {
-        console.log(data);
         var rsaObj = cryptico.generateRSAKey('', 512),
             rsa = rsaObj.parse(localStorageService.load('rsa'));
         $scope.messages.push({
@@ -67,7 +67,6 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('client:remove', function (data) {
-        console.log('logout');
         $scope.clients.splice($scope.clients.indexOf(data), 1);
     });
 
