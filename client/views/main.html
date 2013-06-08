@@ -21,7 +21,7 @@
 
 
         <ul class="messages" id="messages">
-            <li data-ng-repeat="message in messages">{{message.user}}: {{message.text}} </li>
+            <li data-ng-repeat="message in messages | reverse">{{message.user}} to {{message.recipient}}: <mark>{{message.text}}</mark> </li>
         </ul>
     </div>
 </div>

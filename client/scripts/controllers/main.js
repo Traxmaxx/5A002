@@ -37,10 +37,11 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
 
         $scope.messages.push({
             user: $scope.currentUser,
+            recipient: $scope.recipient.username,
             text: $scope.text
         });
 
-        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
+        //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         $scope.text = '';
     };
 
@@ -75,6 +76,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                 } else {
                     $scope.messages.push({
                         user: data.sender,
+                        recipient: $scope.currentUser,
                         text: decryptedtext.plaintext
                     });
                     return;
@@ -87,7 +89,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             text: decryptedtext.plaintext
         });
 
-        $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
+        //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
     });
 
     socket.on('client:update', function (data) {
