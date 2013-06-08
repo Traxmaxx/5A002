@@ -1,62 +1,88 @@
 var io = require('socket.io').listen(80);
 
-io.sockets.on('connection', function (socket) {
-  socket.on('login', function (data) {
-    socket.set('username', data.username);
-    socket.set('pubkey', data.pubkey);
+io.set('log level', 1);
 
-    // Build client list. Callback soup. Here be dragons.
-    var client_list = {};
-    for (var key in io.sockets.sockets) {
-      io.sockets.sockets[key].get('username', function(err, name) {
-        if (name != data.username) {
-          io.sockets.sockets[key].get('username', function(err, key) {
-            client_list[data.username] = {
-              pubkey: key
-            };
-          });
-        }
+var clients = {};
+
+io.sockets.on('connection', function (socket) {
+  // Recieve a login
+  socket.on('login', function (data) {
+    //console.log("login: " + JSON.stringify(data));
+
+    // Check if the username exists
+    for (var key in clients) {
+      if (clients[key].username == data.username) {
+        socket.emit('login:reply', {
+          status: "already_logged_in",
+          clientlist: null
+        });
+        return;
+      }
+    }
+
+    // Add client to list of clients
+    clients[socket.id] = {};
+    clients[socket.id].socket = socket;
+    clients[socket.id].username = data.username;
+    clients[socket.id].pubkey = data.pubkey;
+
+    // Build client list.
+    var client_list = [];
+    for (var key in clients) {
+      client_list.push({
+        username: clients[key].username,
+        pubkey: clients[key].pubkey
       });
     }
 
-    // Send login success, because it will always succeed.
+    // Send out login confirmation
     socket.emit('login:reply', {
-      status: 'ok',
+      status: "ok",
       clientlist: client_list
     });
 
     // Build client update object
-    var client_update = {};
-    client_update[data.username] = {
+    var client_update = {
+      username: data.username,
       pubkey: data.pubkey,
       status: "online"
     };
 
+    console.log("'" + data.username + "' logged in.");
+
     // Broadcast the new client
     socket.broadcast.emit('client:update', client_update);
   });
+
+  // Recieve a message
   socket.on('send:message', function (data) {
+    //console.log("send:message: " + JSON.stringify(data));
+
     // Build message.
-    socket.get('username', function(err, name) {
-      var msg = {};
-      msg.id = data.id;
-      msg.sender = name;
-      msg.data = data.data;
-      // Send message. Callback soup. Here be dragons.
-      for (var key in io.sockets.sockets) {
-        io.sockets.sockets[key].get('username', function(err, name) {
-          if (name == data.username) {
-            io.sockets.sockets[key].emit('recieve:message', msg);
-          }
-        });
+    var msg = {};
+    msg.sender = clients[socket.id].username;
+    msg.message = data.message;
+
+    console.log("'" + msg.sender + "' send a message to '" + data.recipient.username + "'");
+
+    for (var key in clients) {
+      var client = clients[key];
+      if (client.username == data.recipient.username) {
+        client.socket.emit('recieve:message', msg);
       }
-    });
+    }
 
     // Send message status
     socket.emit('send:message', {
       status: "ok"
     });
-    console.log(data);
   });
 
+  // delete the client when it disconnects
+  socket.on('disconnect', function() {
+    if (clients[socket.id] !== undefined) {
+      console.log("'" + clients[socket.id].username + "' logged out.");
+    }
+    delete clients[socket.id];
+  });
 });
