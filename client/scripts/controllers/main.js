@@ -100,8 +100,10 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         for (var i = 0; i < $scope.clients.length; i++)
             orig_list[$scope.clients[i].username] = $scope.clients[i].pubkey;
         var updated_list = {}
-        for (var i = 0; i < data.clientlist.length; i++)
+        for (var i = 0; i < data.clientlist.length; i++) {
             updated_list[data.clientlist[i].username] = data.clientlist[i].pubkey;
+            console.log(data.clientlist[i].username + ' is present');
+        }
         for (var key in orig_list) {
             if (!(key in updated_list)) {
                 $scope.messages.push({
@@ -122,6 +124,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                     ']',
                     text: '[user changed key]'
                 });
+                console.log(key + ' changed key');
             }
         }
         for (var key in updated_list) {
@@ -133,6 +136,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                     ']',
                     text: '[user logged in]'
                 });
+                console.log(key + ' logged in');
             }
         }
 
