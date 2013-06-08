@@ -76,7 +76,10 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                     return;
                 } else {
                     $scope.messages.push({
-                        user: data.sender,
+                        user: data.sender +
+                        '[' +
+                        cryptico.publicKeyID($scope.clients[length].pubkey) +
+                        ']',
                         recipient: $scope.currentUser,
                         text: decryptedtext.plaintext
                     });
@@ -99,27 +102,43 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         for (var i = 0; i < $scope.clients.length; i++)
             orig_list[$scope.clients[i].username] = $scope.clients[i].pubkey;
         var updated_list = {}
-        for (var i = 0; i < data.clientlist.length; i++)
+        for (var i = 0; i < data.clientlist.length; i++) {
             updated_list[data.clientlist[i].username] = data.clientlist[i].pubkey;
+            console.log(data.clientlist[i].username + ' is present');
+        }
         for (var key in orig_list) {
             if (!(key in updated_list)) {
                 $scope.messages.push({
-                    user: key,
+                    user: key +
+                    '[' +
+                    cryptico.publicKeyID(orig_list[key]) +
+                    ']',
                     text: '[user logged out]'
                 });
-            } else if (orig_list[key].pubkey != updated_list[key].pubkey) {
+                console.log(key + ' logged out');
+            } else if (orig_list[key] != updated_list[key]) {
                 $scope.messages.push({
-                    user: key,
+                    user: key +
+                    '[' +
+                    cryptico.publicKeyID(orig_list[key]) +
+                    ' -> ' +
+                    cryptico.publicKeyID(updated_list[key]) +
+                    ']',
                     text: '[user changed key]'
                 });
+                console.log(key + ' changed key');
             }
         }
         for (var key in updated_list) {
             if (!(key in orig_list)) {
                 $scope.messages.push({
-                    user: key,
+                    user: key +
+                    '[' +
+                    cryptico.publicKeyID(updated_list[key]) +
+                    ']',
                     text: '[user logged in]'
                 });
+                console.log(key + ' logged in');
             }
         }
 

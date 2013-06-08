@@ -1,22 +1,48 @@
 var io = require('socket.io').listen(80);
+var winston = require('winston');
+
+var log = new (winston.Logger)();
+
+log.add(winston.transports.Console, {
+  colorize: true,
+  timestamp: true
+});
 
 io.set('log level', 1);
 
 var clients = {};
+
+function buildClientList() {
+  var client_list = [];
+  for (var key in clients) {
+    client_list.push({
+      username: clients[key].username,
+      pubkey: clients[key].pubkey
+    });
+  }
+  return client_list;
+}
+
+function usernameTaken (username) {
+  for (var key in clients) {
+    if (clients[key].username == username) {
+      return true;
+    }
+  }
+  return false;
+}
 
 io.sockets.on('connection', function (socket) {
   // Recieve a login
   socket.on('login', function (data) {
 
     // Check if the username exists
-    for (var key in clients) {
-      if (clients[key].username == data.username) {
-        socket.emit('login:reply', {
-          status: "already_logged_in",
-          clientlist: null
-        });
-        return;
-      }
+    if (usernameTaken(data.username)) {
+      socket.emit('login:reply', {
+        status: "username_taken",
+        clientlist: null
+      });
+      return;
     }
 
     // Add client to list of clients
@@ -25,14 +51,7 @@ io.sockets.on('connection', function (socket) {
     clients[socket.id].username = data.username;
     clients[socket.id].pubkey = data.pubkey;
 
-    // Build client list.
-    var client_list = [];
-    for (var key in clients) {
-      client_list.push({
-        username: clients[key].username,
-        pubkey: clients[key].pubkey
-      });
-    }
+    var client_list = buildClientList();
 
     // Send out login confirmation
     socket.emit('login:reply', {
@@ -40,29 +59,25 @@ io.sockets.on('connection', function (socket) {
       clientlist: client_list
     });
 
-    // Build client update object
-    var client_update = {
-      username: data.username,
-      pubkey: data.pubkey
-    };
-
-    console.log("'" + data.username + "' logged in.");
+    client_list2 = {};
+    client_list2.clientlist = buildClientList();
 
     // Broadcast the new client
-    socket.broadcast.emit('client:add', client_update);
+    socket.broadcast.emit('client:update', client_list2);
+
+    log.info("'" + data.username + "' logged in.");
   });
 
   // Recieve a message
   socket.on('send:message', function (data) {
-    //console.log("send:message: " + JSON.stringify(data));
+    //log.info("send:message: " + JSON.stringify(data));
 
     // Build message.
     var msg = {};
     msg.sender = clients[socket.id].username;
     msg.message = data.message;
 
-    console.log("'" + msg.sender + "' send a message to '" + data.recipient.username + "'");
-
+    // Send message to the specified user
     for (var key in clients) {
       var client = clients[key];
       if (client.username == data.recipient.username) {
@@ -74,12 +89,14 @@ io.sockets.on('connection', function (socket) {
     socket.emit('send:message', {
       status: "ok"
     });
+
+    log.info("'" + msg.sender + "' send a message to '" + data.recipient.username + "'");
   });
 
   // delete the client when it disconnects
   socket.on('disconnect', function() {
     if (clients[socket.id] !== undefined) {
-      console.log("'" + clients[socket.id].username + "' logged out.");
+      log.info("'" + clients[socket.id].username + "' logged out.");
 
       // Build client update object
       var client_update = {
@@ -87,7 +104,10 @@ io.sockets.on('connection', function (socket) {
         pubkey: clients[socket.id].pubkey
       };
 
-      socket.broadcast.emit('client:remove', client_update);
+      client_list = {};
+      client_list.clientlist = buildClientList();
+
+      socket.broadcast.emit('client:update', client_list);
     }
     delete clients[socket.id];
   });
@@ -95,7 +115,7 @@ io.sockets.on('connection', function (socket) {
   // delete the client when it disconnects
   socket.on('logout', function(derp) {
     if (clients[socket.id] !== undefined) {
-      console.log("'" + clients[socket.id].username + "' logged out.");
+      log.info("'" + clients[socket.id].username + "' logged out.");
 
       // Build client update object
       var client_update = {
@@ -103,7 +123,10 @@ io.sockets.on('connection', function (socket) {
         pubkey: clients[socket.id].pubkey
       };
 
-      socket.broadcast.emit('client:remove', client_update);
+      client_list = {};
+      client_list.clientlist = buildClientList();
+
+      socket.broadcast.emit('client:update', client_list);
     }
     delete clients[socket.id];
   });
