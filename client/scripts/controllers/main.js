@@ -29,7 +29,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
 
         socket.emit('send:message', {
             recipient: $scope.recipient,
-            message: cryptico.encrypt($scope.text, $scope.recipient.pubkey)
+            message: cryptico.encrypt($scope.text, $scope.recipient.pubkey).cipher
         });
 
         $scope.messages.push({
