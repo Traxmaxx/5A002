@@ -61,9 +61,14 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         });
     });
 
-    socket.on('client:update', function (data) {
+    socket.on('client:add', function (data) {
         $scope.clients.push(data);
     });
+
+    socket.on('client:remove', function (data) {
+      $scope.clients.splice($scope.clients.indexOf(data), 1);
+    });
+
 
     //Connect on load if already loggedin
     if ($scope.currentUser) {
