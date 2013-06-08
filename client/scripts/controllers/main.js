@@ -91,7 +91,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     });
 
     socket.on('client:update', function (data) {
-        // First we check if a user has logged out or changed its key
+        // First we check if a user has logged in/out or changed its key
         var orig_list = {}
         for (var i = 0; i < $scope.clients.length; i++)
             orig_list[$scope.clients[i].username] = $scope.clients[i].pubkey;
@@ -107,6 +107,14 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
             } else if (orig_list[key].pubkey != updated_list[key].pubkey) {
                 $scope.messages.push({
                     user: key + ' - user changed key',
+                    text: ''
+                });
+            }
+        }
+        for (var key in updated_list) {
+            if (!(key in orig_list)) {
+                $scope.messages.push({
+                    user: key + ' - user logged in',
                     text: ''
                 });
             }
