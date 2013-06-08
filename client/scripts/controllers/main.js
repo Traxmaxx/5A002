@@ -75,7 +75,10 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                     return;
                 } else {
                     $scope.messages.push({
-                        user: data.sender,
+                        user: data.sender +
+                        '[' +
+                        cryptico.publicKeyID($scope.clients[length].pubkey) +
+                        ']',
                         text: decryptedtext.plaintext
                     });
                     return;
@@ -102,12 +105,21 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         for (var key in orig_list) {
             if (!(key in updated_list)) {
                 $scope.messages.push({
-                    user: key,
+                    user: key +
+                    '[' +
+                    cryptico.publicKeyID(orig_list[key]) +
+                    ']',
                     text: '[user logged out]'
                 });
-            } else if (orig_list[key].pubkey != updated_list[key].pubkey) {
+                console.log(key + ' logged out');
+            } else if (orig_list[key] != updated_list[key]) {
                 $scope.messages.push({
-                    user: key,
+                    user: key +
+                    '[' +
+                    cryptico.publicKeyID(orig_list[key]) +
+                    ' -> ' +
+                    cryptico.publicKeyID(updated_list[key]) +
+                    ']',
                     text: '[user changed key]'
                 });
             }
@@ -115,7 +127,10 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         for (var key in updated_list) {
             if (!(key in orig_list)) {
                 $scope.messages.push({
-                    user: key,
+                    user: key +
+                    '[' +
+                    cryptico.publicKeyID(updated_list[key]) +
+                    ']',
                     text: '[user logged in]'
                 });
             }
