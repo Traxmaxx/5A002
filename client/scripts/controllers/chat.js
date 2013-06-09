@@ -6,9 +6,13 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
         rsa = rsaObj.parse(localStorageService.load('rsa'));
 
+        var msg = {}
+        msg.user = $scope.currentUser;
+        msg.text = $scope.text;
+
         socket.emit('send:message', {
             recipient: $scope.clients[$scope.params.recipient],
-            message: cryptico.encrypt($scope.text, $scope.clients[$scope.params.recipient].pubkey, rsa).cipher
+            message: cryptico.encrypt(JSON.stringify(msg), $scope.clients[$scope.params.recipient].pubkey, rsa).cipher
         });
 
         $scope.messages.push({
@@ -34,13 +38,22 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         var decryptedtext = cryptico.decrypt(data.message, rsa);
+        var msg = JSON.parse(decryptedtext.plaintext)
+        var plaintext = msg.text;
+        if (msg.user != data.sender) {
+            $scope.messages.push({
+                user: msg.user + ' - server told it\'s ' + data.sender,
+                text: plaintext
+            });
+            return;
+        }
 
         if ($scope.clients[$scope.params.recipient].username == data.sender) {
             if ($scope.clients[$scope.params.recipient].pubkey != decryptedtext.publicKeyString) {
                 $scope.messages.push({
                     user: data.sender + ' - invalid signature ' +
                     '(verification failed)!',
-                    text: decryptedtext.plaintext
+                    text: plaintext
                 });
                 return;
             } else {
@@ -50,7 +63,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
                     cryptico.publicKeyID($scope.clients[$scope.params.recipient].pubkey) +
                     ']',
                     recipient: $scope.currentUser,
-                    text: decryptedtext.plaintext
+                    text: plaintext
                 });
                 return;
             }
@@ -58,7 +71,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
 
         $scope.messages.push({
             user: 'invalid sender (not in list)!',
-            text: decryptedtext.plaintext
+            text: plaintext
         });
 
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
