@@ -49,6 +49,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
       $rootScope.currentUser = localStorageService.load('username');
       $rootScope.bitLength = 512;
       $rootScope.messages = {};
+      $rootScope.messages_read = {};
       $rootScope.clients = {};
       $rootScope.params = $routeParams;
 
@@ -111,6 +112,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
             });
             console.log(key + ' logged in');
           }
+          $rootScope.messages_read[key] = $rootScope.messages[key].length;
         }
 
         delete data.clientlist[$rootScope.currentUser];
