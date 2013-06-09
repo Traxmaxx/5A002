@@ -30,6 +30,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             $scope.messages[$scope.params.recipient] = [];
         $scope.messages[$scope.params.recipient].push({
             user: 'me',
+            timestamp: new Date().getTime(),
             recipient: $scope.params.recipient,
             text: $scope.text
         });
