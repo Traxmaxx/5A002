@@ -89,7 +89,7 @@ h1 small {
 h1 small a {
   font-size: 2.2rem !important;
   line-height: 3rem;
-  margin: 0 0 0 15px;
+  margin: 0 10px 0 15px;
   vertical-align: bottom;
 }
 h2.chat-title {
@@ -141,7 +141,7 @@ input[type="submit"] {
   font-family: 'Lato', sans-serif;
   font-size: 1.6rem;
   font-weight: 700;
-  padding: 10px 20px;
+  padding: 10px 20px !important;
   -webkit-transition: all .2s ease-in-out;
   -moz-transition: all .2s ease-in-out;
   -o-transition: all .2s ease-in-out;
@@ -178,6 +178,7 @@ main #message-input {
   width: 100%;
   height: 100%;
   padding: 5px;
+  margin: 0 0 0 -5px;
 }
 
 main .messages {
@@ -245,6 +246,7 @@ main .messages li mark {
   margin: 23px 0 0 -25px;
   position: absolute;
 }
+.login p {color: #fff;}
 
 
 .users {

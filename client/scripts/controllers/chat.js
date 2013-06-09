@@ -35,7 +35,6 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             text: $scope.text
         });
 
-        console.log('updating read count for ' + $scope.params.recipient + ': ' + $scope.messages[$scope.params.recipient].length);
         $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
 
         $('#message-input').val('');
