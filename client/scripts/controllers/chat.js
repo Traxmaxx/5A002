@@ -6,6 +6,12 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
     }
 
     $scope.sendMessage = function () {
+        $scope.messages.push({
+          user: 'me',
+          recipient: $scope.params.recipient,
+          text: $scope.text
+        });
+
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
           rsa = rsaObj.parse(localStorageService.load('rsa')),
           msg = {};
