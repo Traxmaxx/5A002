@@ -136,7 +136,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('logout', function(derp) {
     if (clients[socket.id] !== undefined) {
       log.info("'" + clients[socket.id].username + "' logged out.");
-      clients[socket.id].socket.close();
+      socket.disconnect();
       delete clients[socket.id];
 
       client_list = {};
