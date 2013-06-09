@@ -1,4 +1,12 @@
-var io = require('socket.io').listen(80);
+var express = require('express');
+var app = new express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
+app.use('/', express.static(__dirname + '/client'));
+
+server.listen(80);
+
 var winston = require('winston');
 
 var log = new (winston.Logger)();
@@ -24,7 +32,11 @@ function buildClientList() {
 }
 
 function buildUserList() {
-  return Object.keys(clients).join(' ');
+  var user_list = "";
+  for (var key in clients) {
+    user_list += clients[key].username + " ";
+  }
+  return user_list;
 }
 
 function userLoggedIn (username) {
