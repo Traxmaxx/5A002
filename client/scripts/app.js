@@ -48,9 +48,9 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
   .run(function ($rootScope, localStorageService, socket, $location, $routeParams) {
       $rootScope.currentUser = localStorageService.load('username');
       $rootScope.bitLength = 512;
-      $rootScope.messages = {};
-      $rootScope.messages_read = {};
-      $rootScope.clients = {};
+      $rootScope.messages = {}; // per-sender message queue
+      $rootScope.messages_read = {}; // per-sender number of read messages
+      $rootScope.clients = {}; // hash table with peers
       $rootScope.params = $routeParams;
 
       $rootScope.connectSocket = function () {
