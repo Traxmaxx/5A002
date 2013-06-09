@@ -49,8 +49,8 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             return;
         }
 
-        if ($scope.params.recipient == data.sender) {
-            if ($scope.clients[$scope.params.recipient].pubkey !== decryptedtext.publicKeyString) {
+        if ($scope.clients[data.sender]) {
+            if ($scope.clients[data.sender].pubkey !== decryptedtext.publicKeyString) {
                 $scope.messages.push({
                     user: data.sender + ' - invalid signature ' +
                     '(verification failed)!',
@@ -61,7 +61,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
                 $scope.messages.push({
                     user: data.sender +
                     '[' +
-                    cryptico.publicKeyID($scope.clients[$scope.params.recipient].pubkey) +
+                    cryptico.publicKeyID($scope.clients[data.sender].pubkey) +
                     ']',
                     recipient: $scope.currentUser,
                     text: plaintext
@@ -71,7 +71,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
         }
 
         $scope.messages.push({
-            user: 'invalid sender (not in list)!',
+            user: 'invalid sender (' + data.sender + ' is not in our list)!',
             text: plaintext
         });
 
