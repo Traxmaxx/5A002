@@ -64,7 +64,8 @@ io.sockets.on('connection', function (socket) {
 
     // Broadcast the new client
     //socket.broadcast.emit('client:update', client_list2);
-    io.sockets.emit('client:update', client_list2);
+    for (var cli in clients)
+      cli.socket.emit('client:update', client_list2);
 
     log.info("'" + data.username + "' logged in.");
   });
@@ -109,7 +110,8 @@ io.sockets.on('connection', function (socket) {
       client_list.clientlist = buildClientList();
 
       //socket.broadcast.emit('client:update', client_list);
-      io.sockets.emit('client:update', client_list);
+      for (var cli in clients)
+        cli.socket.emit('client:update', client_list);
     }
     delete clients[socket.id];
   });
@@ -129,7 +131,8 @@ io.sockets.on('connection', function (socket) {
       client_list.clientlist = buildClientList();
 
       //socket.broadcast.emit('client:update', client_list);
-      io.sockets.emit('client:update', client_list);
+      for (var cli in clients)
+        cli.socket.emit('client:update', client_list);
     }
     delete clients[socket.id];
   });
