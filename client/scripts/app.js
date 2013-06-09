@@ -135,7 +135,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
 
       socket.on('recieve:message', function (data) {
         var decryptedtext = cryptico.decrypt(data.message, $rootScope.rsa);
-        var msg = JSON.parse(decryptedtext.plaintext)
+        var msg = JSON.parse(unescape(decryptedtext.plaintext));
         var plaintext = msg.text;
         if (msg.user != data.sender) {
           $rootScope.messages[msg.user].push({

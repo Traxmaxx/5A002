@@ -21,7 +21,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
 
         socket.emit('send:message', {
             recipient: $scope.params.recipient,
-            message: cryptico.encrypt(JSON.stringify(msg),
+            message: cryptico.encrypt(escape(JSON.stringify(msg)),
                                       $scope.clients[$scope.params.recipient].pubkey,
                                       $scope.rsa).cipher
         });
