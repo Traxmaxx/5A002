@@ -29,7 +29,7 @@
 
     <!-- Add your site or application content here -->
     <div class="container">
-        <h1>CESA <small data-ng-show="currentUser">Hej {{currentUser}} <a href="#/login" data-ng-click="logout()">Logout</a></small></h1>
+        <h1>CESA <small data-ng-show="currentUser">Hej {{currentUser}} <a href="#/login" data-ng-click="logout()" class="ss-icon logout">logout</a></small></h1>
         <main ng-view></main>
     </div>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -39,6 +39,7 @@
     <script language="JavaScript" type="text/javascript" src="cryptico/rsa.js"></script>
     <script language="JavaScript" type="text/javascript" src="cryptico/aes.js"></script>
     <script language="JavaScript" type="text/javascript" src="cryptico/api.js"></script>
+    <script src="components/symbolset.js"></script>
     <script src="components/angular/angular.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="scripts/modules/local-storage.js"></script>
