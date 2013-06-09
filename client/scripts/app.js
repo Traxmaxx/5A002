@@ -21,6 +21,7 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
   })
   .run(function ($rootScope, localStorageService, socket, $location) {
       $rootScope.currentUser = localStorageService.load('username');
+      $rootScope.bitLength = 512;
 
       $rootScope.connectSocket = function () {
           socket.emit('login', {
@@ -40,8 +41,13 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
       if ($rootScope.currentUser) {
         $rootScope.connectSocket();
       } else {
-        $location.path('/login')
+        $location.path('/login');
       }
+
+      $rootScope.$on('event:auth-successful', function () {
+        $rootScope.currentUser = localStorageService.load('username');
+        $rootScope.connectSocket();
+      });
   });
 
 app.factory('socket', function ($rootScope) {

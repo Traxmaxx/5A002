@@ -3,7 +3,6 @@
 app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
     $scope.messages = [];
     $scope.clients = [];
-    $scope.bitLength = 512;
 
     $scope.sendMessage = function () {
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
