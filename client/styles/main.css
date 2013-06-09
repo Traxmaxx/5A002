@@ -250,6 +250,9 @@ main .messages li mark {
   transition: all .2s ease-in-out;
   width: 100%;
 }
+.users li a .ss-icon {
+  margin: 0 10px 0 0;
+}
 .users li a:active {
   background: #2f6fb6;
 }
@@ -268,6 +271,12 @@ main .messages li mark {
   height: 25px;
   text-align: center;
   width: 25px;
+}
+.users li span.arrow {
+  float: right;
+  line-height: 3.2rem;
+  margin: 0 0 0 15px;
+  height: 25px;
 }
 
 
