@@ -19,20 +19,24 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
         msg.user = $scope.currentUser;
         msg.text = $scope.text;
 
-        socket.emit('send:message', {
-            recipient: $scope.params.recipient,
-            message: cryptico.encrypt(escape(JSON.stringify(msg)),
-                                      $scope.clients[$scope.params.recipient].pubkey,
-                                      $scope.rsa).cipher
-        });
-
         if (!$scope.messages[$scope.params.recipient])
             $scope.messages[$scope.params.recipient] = [];
-        $scope.messages[$scope.params.recipient].push({
+        var idx = $scope.messages[$scope.params.recipient].push({
             user: 'me',
+            acked: false,
             timestamp: new Date().getTime(),
             recipient: $scope.params.recipient,
             text: $scope.text
+        });
+        idx--;
+        $scope.messages[$scope.params.recipient][idx].id = idx;
+
+        socket.emit('send:message', {
+            recipient: $scope.params.recipient,
+            id: idx,
+            message: cryptico.encrypt(escape(JSON.stringify(msg)),
+                                      $scope.clients[$scope.params.recipient].pubkey,
+                                      $scope.rsa).cipher
         });
 
         $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
