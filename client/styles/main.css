@@ -178,6 +178,7 @@ main #message-input {
   width: 100%;
   height: 100%;
   padding: 5px;
+  margin: 0 0 0 -5px;
 }
 
 main .messages {
@@ -245,6 +246,7 @@ main .messages li mark {
   margin: 23px 0 0 -25px;
   position: absolute;
 }
+.login p {color: #fff;}
 
 
 .users {
