@@ -140,6 +140,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
             user: msg.user + ' - server told it\'s ' + data.sender,
             text: plaintext
           });
+          $rootScope.$broadcast('event:message_received');
           return;
         }
 
@@ -150,6 +151,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
                   '(verification failed)!',
               text: plaintext
             });
+            $rootScope.$broadcast('event:message_received');
             return;
           } else {
             $rootScope.messages[data.sender].push({
@@ -160,6 +162,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
               recipient: $rootScope.currentUser,
               text: plaintext
             });
+            $rootScope.$broadcast('event:message_received');
             return;
           }
         }
@@ -168,6 +171,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
           user: 'invalid sender (' + data.sender + ' is not in our list)!',
           text: plaintext
         });
+        $rootScope.$broadcast('event:message_received');
 
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
       });

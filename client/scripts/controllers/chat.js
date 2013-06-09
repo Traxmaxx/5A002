@@ -37,9 +37,15 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             text: $scope.text
         });
 
+        console.log('updating read count for ' + $scope.params.recipient + ': ' + $scope.messages[$scope.params.recipient].length);
         $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
 
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         $('#message-input').val('');
     };
+
+    $scope.$on('event:message_received', function () {
+        $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
+    });
+
 });
