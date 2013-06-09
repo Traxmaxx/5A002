@@ -76,7 +76,7 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
             $rootScope.messages.push({
               user: key,
               text: 'user logged in with ' +
-                  cryptico.publicKeyID(data.clientlist[key])
+                  cryptico.publicKeyID(data.clientlist[key].pubkey)
             });
             console.log(key + ' logged in');
           }
