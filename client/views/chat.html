@@ -8,7 +8,7 @@
     <li data-ng-repeat="(user, message) in messages[params.recipient]" data-ng-class="message.user">
         <div class="ss-icon">comment</div>
         <div>
-            <small>{{message.user}}</small>
+            <small>{{message.user}} {{message.timestamp|timify}}</small>
             <mark>{{message.text}}</mark>
         </div>
     </li>

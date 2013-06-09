@@ -90,12 +90,14 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
           if (!(key in data.clientlist)) {
             $rootScope.messages[key].push({
               user: key,
+              timestamp: new Date().getTime(),
               text: 'user logged out'
             });
             console.log(key + ' logged out');
           } else if ($rootScope.clients[key].pubkey != data.clientlist[key].pubkey) {
             $rootScope.messages[key].push({
               user: key,
+              timestamp: new Date().getTime(),
               text: 'user changed key from ' +
                   cryptico.publicKeyID($rootScope.clients[key].pubkey) +
                   ' to '
@@ -109,6 +111,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
               $rootScope.messages[key] = [];
             $rootScope.messages[key].push({
               user: key,
+              timestamp: new Date().getTime(),
               text: 'user logged in with ' +
                   cryptico.publicKeyID(data.clientlist[key].pubkey)
             });
@@ -137,6 +140,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
         if (msg.user != data.sender) {
           $rootScope.messages[msg.user].push({
             user: msg.user + ' - server told it\'s ' + data.sender,
+            timestamp: new Date().getTime(),
             text: plaintext
           });
           $rootScope.$broadcast('event:message_received');
@@ -148,6 +152,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
             $rootScope.messages[data.sender].push({
               user: data.sender + ' - invalid signature ' +
                   '(verification failed)!',
+              timestamp: new Date().getTime(),
               text: plaintext
             });
             $rootScope.$broadcast('event:message_received');
@@ -155,6 +160,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
           } else {
             $rootScope.messages[data.sender].push({
               user: data.sender,
+              timestamp: new Date().getTime(),
               recipient: $rootScope.currentUser,
               text: plaintext
             });
@@ -165,6 +171,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
 
         $rootScope.messages[data.sender].push({
           user: 'invalid sender (' + data.sender + ' is not in our list)!',
+          timestamp: new Date().getTime(),
           text: plaintext
         });
         $rootScope.$broadcast('event:message_received');
@@ -225,3 +232,9 @@ $.fn.isOnScreen = function(){
   bounds.bottom = bounds.top + this.outerHeight();
   return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
 };
+app.filter('timify', function() {
+  return function(ts) {
+    var date = new Date(ts);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  };
+});
