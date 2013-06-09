@@ -241,6 +241,7 @@ main .messages li mark {
   color: #fff;
   display: block;
   font-size: 2rem;
+  line-height: 2.5rem;
   text-decoration: none;
   padding: 20px;
   -webkit-transition: all .2s ease-in-out;
@@ -255,7 +256,19 @@ main .messages li mark {
 .no-touch .users li a:hover {
   background: #2f6fb6;
 }
-.users li + li {}
+.users li span.read {
+  background: red;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -ms-border-radius: 15px;
+  border-radius: 15px;
+  float: right;
+  font-size: 1.7rem;
+  line-height: 2.5rem;
+  height: 25px;
+  text-align: center;
+  width: 25px;
+}
 
 
 a.logout {
