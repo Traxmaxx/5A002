@@ -70,6 +70,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
       //Connect on load if already loggedin
       if ($rootScope.currentUser) {
         $rootScope.connectSocket();
+        $location.path('/users');
       } else {
         $location.path('/login');
       }
