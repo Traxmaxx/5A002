@@ -69,12 +69,4 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
     socket.on('send:messagereply', function (data) {
         console.log(data);
     });
-
-    $('#message-input').keydown(function(event) {
-        if (event.keyCode == 13 && $scope.recipient) {
-          console.log($('#message-input').val());
-          $scope.sendMessage();
-          return false;
-        }
-    });
 });
