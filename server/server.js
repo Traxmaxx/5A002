@@ -114,11 +114,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function() {
     if (clients[socket.id] !== undefined) {
       log.info("'" + clients[socket.id].username + "' disconnected.");
-      // Build client update object
-      var client_update = {
-        username: clients[socket.id].username,
-        pubkey: clients[socket.id].pubkey
-      };
+      delete clients[socket.id];
 
       client_list = {};
       client_list.clientlist = buildClientList();
@@ -127,18 +123,13 @@ io.sockets.on('connection', function (socket) {
       for (var cli in clients)
         clients[cli].socket.emit('client:update', client_list);
     }
-    delete clients[socket.id];
   });
 
   // delete the client when it disconnects
   socket.on('logout', function(derp) {
     if (clients[socket.id] !== undefined) {
       log.info("'" + clients[socket.id].username + "' logged out.");
-      // Build client update object
-      var client_update = {
-        username: clients[socket.id].username,
-        pubkey: clients[socket.id].pubkey
-      };
+      delete clients[socket.id];
 
       client_list = {};
       client_list.clientlist = buildClientList();
@@ -147,7 +138,6 @@ io.sockets.on('connection', function (socket) {
       for (var cli in clients)
         clients[cli].socket.emit('client:update', client_list);
     }
-    delete clients[socket.id];
   });
 });
 
