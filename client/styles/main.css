@@ -65,7 +65,7 @@ h1 {
   border-bottom: 1px solid #474d4f;
   color: #fff;
   font-family: 'Lato', sans-serif;
-  font-size: 3rem;
+  font-size: 2.2rem;
   line-height: 4rem;
   margin: 0px;
   padding: 20px 10px;
@@ -74,16 +74,23 @@ h1 {
   max-width: 960px;
   z-index: 2;
 }
+h1 a {text-decoration: none;}
 h2 {
   color: #fff;
   font-family: 'Lato', sans-serif;
   font-size: 2rem;
-  line-height: 2.5rem;
+  line-height: 2.6rem;
   margin: 0 0 10px 0;
 }
 h1 small {
   float: right;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+}
+h1 small a {
+  font-size: 2.2rem !important;
+  line-height: 3rem;
+  margin: 0 0 0 15px;
+  vertical-align: bottom;
 }
 h2.chat-title {
   text-align: center;
@@ -130,6 +137,7 @@ input[type="submit"] {
   -webkit-border-radius: 3px;
   -ms-border-radius: 3px;
   border-radius: 3px;
+  color: #fff;
   font-family: 'Lato', sans-serif;
   font-size: 1.6rem;
   font-weight: 700;
@@ -219,15 +227,23 @@ main .messages li mark {
   max-width: 960px;
   padding: 10px;
   position: absolute;
+  text-align: center;
   top: 91px;
   width: 100%;
   z-index: 2;
 }
+.login div {position: relative;}
 .login input {
-  display: block;
+  font-size: 2rem;
   margin: 10px auto;
-  padding: 5px 10px;
+  padding: 5px 25px 5px 10px;
   width: 200px;
+}
+.login .ss-icon {
+  font-size: 2rem;
+  color: #ccc;
+  margin: 23px 0 0 -25px;
+  position: absolute;
 }
 
 
