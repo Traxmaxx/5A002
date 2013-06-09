@@ -89,22 +89,6 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
         $rootScope.clients = data.clientlist;
       });
 
-      socket.on('client:add', function (data) {
-        $rootScope.messages.push({
-          user: 'Warning',
-          text: 'server sent client:add'
-        });
-        $rootScope.clients.push(data);
-      });
-
-      socket.on('client:remove', function (data) {
-        $rootScope.messages.push({
-          user: 'Warning',
-          text: 'server sent client:remove'
-        });
-        $rootScope.clients.splice($rootScope.clients.indexOf(data), 1);
-      });
-
       socket.on('login:reply', function (data) {
         $rootScope.clients = data.clientlist;
       });
