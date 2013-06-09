@@ -1,17 +1,16 @@
-    <h2>Messages</h2>
-    <form ng-submit="sendMessage()" id="message-form">
-        <textarea placeholder="lalala" data-ng-model="text" rows="20" cols="10" required id="message-input"></textarea>
-        <div class="contact-action">
-            <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients" required>
-                <option value="">Select a Recipient</option></select>
-            <input type="submit"/>
-        </div>
-    </form>
+<a data-ng-href="/#/users">Back</a>
+<h2>Messaging with {{clients[params.recipient].username}}</h2>
+<form ng-submit="sendMessage()" id="message-form">
+    <textarea placeholder="lalala" data-ng-model="text" rows="20" cols="10" required id="message-input"></textarea>
+    <div class="contact-action">
+        <input type="submit"/>
+    </div>
+</form>
 
 
-    <ul class="messages" id="messages">
-        <li data-ng-repeat="message in messages | reverse" data-ng-class="message.user">
-            <small>{{message.user}}</small>
-            <mark>{{message.text}}</mark>
-        </li>
-    </ul>
+<ul class="messages" id="messages">
+    <li data-ng-repeat="message in messages | reverse" data-ng-class="message.user">
+        <small>{{message.user}}</small>
+        <mark>{{message.text}}</mark>
+    </li>
+</ul>

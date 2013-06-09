@@ -1,31 +1,25 @@
 'use strict';
 
 app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
-    $scope.messages = [];
-    $scope.clients = [];
 
     $scope.sendMessage = function () {
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
         rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         socket.emit('send:message', {
-            recipient: $scope.recipient,
-            message: cryptico.encrypt($scope.text, $scope.recipient.pubkey, rsa).cipher
+            recipient: $scope.clients[$scope.params.recipient],
+            message: cryptico.encrypt($scope.text, $scope.clients[$scope.params.recipient].pubkey, rsa).cipher
         });
 
         $scope.messages.push({
             user: 'me',
-            recipient: $scope.recipient.username,
+            recipient: $scope.clients[$scope.params.recipient],
             text: $scope.text
         });
 
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         $('#message-input').val('');
     };
-
-    socket.on('login:reply', function (data) {
-        $scope.clients = data.clientlist;
-    });
 
     socket.on('news', function (data) {
         console.log(data);
@@ -40,28 +34,25 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             rsa = rsaObj.parse(localStorageService.load('rsa'));
 
         var decryptedtext = cryptico.decrypt(data.message, rsa);
-        var length = $scope.clients.length;
 
-        while (length--) {
-            if ($scope.clients[length].username == data.sender) {
-                if ($scope.clients[length].pubkey != decryptedtext.publicKeyString) {
-                    $scope.messages.push({
-                        user: data.sender + ' - invalid signature ' +
-                        '(verification failed)!',
-                        text: decryptedtext.plaintext
-                    });
-                    return;
-                } else {
-                    $scope.messages.push({
-                        user: data.sender +
-                        '[' +
-                        cryptico.publicKeyID($scope.clients[length].pubkey) +
-                        ']',
-                        recipient: $scope.currentUser,
-                        text: decryptedtext.plaintext
-                    });
-                    return;
-                }
+        if ($scope.clients[$scope.params.recipient].username == data.sender) {
+            if ($scope.clients[$scope.params.recipient].pubkey != decryptedtext.publicKeyString) {
+                $scope.messages.push({
+                    user: data.sender + ' - invalid signature ' +
+                    '(verification failed)!',
+                    text: decryptedtext.plaintext
+                });
+                return;
+            } else {
+                $scope.messages.push({
+                    user: data.sender +
+                    '[' +
+                    cryptico.publicKeyID($scope.clients[$scope.params.recipient].pubkey) +
+                    ']',
+                    recipient: $scope.currentUser,
+                    text: decryptedtext.plaintext
+                });
+                return;
             }
         }
 
@@ -73,58 +64,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
     });
 
-    socket.on('client:update', function (data) {
-        // First we check if a user has logged in/out or changed its key
-        var orig_list = {}
-        for (var i = 0; i < $scope.clients.length; i++)
-            orig_list[$scope.clients[i].username] = $scope.clients[i].pubkey;
-        var updated_list = {}
-        for (var i = 0; i < data.clientlist.length; i++) {
-            updated_list[data.clientlist[i].username] = data.clientlist[i].pubkey;
-            console.log(data.clientlist[i].username + ' is present');
-        }
-        for (var key in orig_list) {
-            if (!(key in updated_list)) {
-                $scope.messages.push({
-                    user: key,
-                    text: 'user logged out'
-                });
-                console.log(key + ' logged out');
-            } else if (orig_list[key] != updated_list[key]) {
-                $scope.messages.push({
-                    user: key,
-                    text: 'user changed key from ' + cryptico.publicKeyID(orig_list[key]) + ' to ' + cryptico.publicKeyID(updated_list[key])
-                });
-            }
-        }
-        for (var key in updated_list) {
-            if (!(key in orig_list)) {
-                $scope.messages.push({
-                    user: key,
-                    text: 'user logged in with ' + cryptico.publicKeyID(updated_list[key])
-                });
-                console.log(key + ' logged in');
-            }
-        }
 
-        $scope.clients = data.clientlist;
-    });
-
-    socket.on('client:add', function (data) {
-        $scope.messages.push({
-            user: 'Warning',
-            text: 'server sent client:add'
-        });
-        $scope.clients.push(data);
-    });
-
-    socket.on('client:remove', function (data) {
-        $scope.messages.push({
-            user: 'Warning',
-            text: 'server sent client:remove'
-        });
-        $scope.clients.splice($scope.clients.indexOf(data), 1);
-    });
 
     socket.on('send:messagereply', function (data) {
         console.log(data);
