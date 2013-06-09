@@ -61,13 +61,13 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
               text: 'user logged out'
             });
             console.log(key + ' logged out');
-          } else if ($rootScope.clients[key] != data.clientlist[key]) {
+          } else if ($rootScope.clients[key].pubkey != data.clientlist[key].pubkey) {
             $rootScope.messages.push({
               user: key,
               text: 'user changed key from ' +
-                  cryptico.publicKeyID($rootScope.clients[key]) +
+                  cryptico.publicKeyID($rootScope.clients[key].pubkey) +
                   ' to '
-                  + cryptico.publicKeyID(data.clientlist[key])
+                  + cryptico.publicKeyID(data.clientlist[key].pubkey)
             });
           }
         }
