@@ -92,7 +92,7 @@ input[type="submit"]:active {
 }
 
 
-.chat-wrapper {
+main {
   background: #32393b;
   height: 100%;
   max-width: 960px;
@@ -101,7 +101,7 @@ input[type="submit"]:active {
   top: 0px;
   width: 100%;
 }
-.chat-wrapper form {
+main form {
   background: #32393b;
   bottom: 0px;
   left: 0px;
@@ -110,37 +110,54 @@ input[type="submit"]:active {
   position: absolute;
   width: 100%;
 }
-.chat-wrapper textarea {
+main textarea {
   width: 65%;
   height: 100%;
   border: 3px solid #cccccc;
   padding: 5px;
 }
-.chat-wrapper .contact-action {
+main .contact-action {
   display: inline-block;
   height: 100%;
   position: relative;
   width: 30%;
 }
-.chat-wrapper .contact-action select {
+main .contact-action select {
   display: block;
   width: 100%;
 }
-.chat-wrapper .contact-action input {
+main .contact-action input {
   left: 0px;
   position: absolute;
   bottom: 0px;
 }
 
-.chat-wrapper .messages {
+main .messages {
   color: #ccc;
   height: 100%;
   list-style: inside none;
   overflow: auto;
   padding: 0 0 160px 0;
 }
-.chat-wrapper .messages li {
+main .messages li {
+  background: #4e575a;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  clear: both;
+  float: left;
+  line-height: 1.8rem;
   margin: 0 0 5px 0;
+  padding: 8px 10px;
+}
+main .messages li.me {float: right;}
+main .messages li small {
+  display: block;
+}
+main .messages li mark {
+  background: none;
+  color: #fff;
 }
 
 
