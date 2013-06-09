@@ -219,6 +219,7 @@ main .messages li mark {
   color: #fff;
   max-width: 100%;
 }
+main .messages li mark .ss-icon {color: green;}
 
 
 .login {
