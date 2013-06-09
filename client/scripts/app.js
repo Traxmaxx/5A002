@@ -1,5 +1,9 @@
 'use strict';
 
+if (!("ontouchstart" in document.documentElement)) {
+  document.documentElement.className += " no-touch";
+}
+
 var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
   .config(function ($routeProvider) {
     $routeProvider

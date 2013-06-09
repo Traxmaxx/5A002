@@ -1,7 +1,9 @@
 'use strict';
 
 app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
-    $('#message-input').focus();
+    if (!("ontouchstart" in document.documentElement)) {
+      $('#message-input').focus();
+    }
 
     $scope.sendMessage = function () {
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
