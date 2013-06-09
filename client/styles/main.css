@@ -140,7 +140,24 @@ input[type="submit"]:active {
   padding: 0 0 160px 0;
 }
 .chat-wrapper .messages li {
+  background: #4e575a;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  clear: both;
+  float: left;
+  line-height: 1.8rem;
   margin: 0 0 5px 0;
+  padding: 8px 10px;
+}
+.chat-wrapper .messages li.me {float: right;}
+.chat-wrapper .messages li small {
+  display: block;
+}
+.chat-wrapper .messages li mark {
+  background: none;
+  color: #fff;
 }
 
 

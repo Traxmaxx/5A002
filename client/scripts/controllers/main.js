@@ -37,7 +37,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         });
 
         $scope.messages.push({
-            user: $scope.currentUser,
+            user: 'me',
             recipient: $scope.recipient.username,
             text: $scope.text
         });
