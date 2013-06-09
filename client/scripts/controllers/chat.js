@@ -27,10 +27,8 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
                                       rsa).cipher
         });
 
-        if (!$scope.messages[$scope.params.recipient]) {
+        if (!$scope.messages[$scope.params.recipient])
             $scope.messages[$scope.params.recipient] = [];
-            $scope.messages_read[$scope.params.recipient] = 0;
-        }
         $scope.messages[$scope.params.recipient].push({
             user: 'me',
             recipient: $scope.params.recipient,
