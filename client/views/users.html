@@ -2,7 +2,7 @@
     <li data-ng-repeat="(name, client) in clients" class="user">
     <a data-ng-href="/#/chat/{{name}}">
         <span class="ss-icon">user</span>
-        {{name}} {{messages[name].length - messages_read[name]}}
+        {{name}} <span class="read" data-ng-show="messages[name].length - messages_read[name]">{{messages[name].length - messages_read[name]}}</span>
     </a>
     </li>
 </ul>
