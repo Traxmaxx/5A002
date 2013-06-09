@@ -31,9 +31,13 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
         rsa = rsaObj.parse(localStorageService.load('rsa'));
 
+        var msg = {}
+        msg.user = $scope.currentUser;
+        msg.text = $scope.text;
+
         socket.emit('send:message', {
             recipient: $scope.recipient,
-            message: cryptico.encrypt($scope.text, $scope.recipient.pubkey, rsa).cipher
+            message: cryptico.encrypt(JSON.stringify(msg), $scope.recipient.pubkey, rsa).cipher
         });
 
         $scope.messages.push({
@@ -65,13 +69,22 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         var decryptedtext = cryptico.decrypt(data.message, rsa);
         var length = $scope.clients.length;
 
+        var msg = JSON.parse(decryptedtext.plaintext)
+        var plaintext = msg.text;
+        if (msg.user != data.sender) {
+            $scope.messages.push({
+                user: msg.user + ' - server told it\'s ' + data.sender,
+                text: plaintext
+            });
+        }
+
         while (length--) {
             if ($scope.clients[length].username == data.sender) {
                 if ($scope.clients[length].pubkey != decryptedtext.publicKeyString) {
                     $scope.messages.push({
                         user: data.sender + ' - invalid signature ' +
                         '(verification failed)!',
-                        text: decryptedtext.plaintext
+                        text: plaintext
                     });
                     return;
                 } else {
@@ -81,7 +94,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
                         cryptico.publicKeyID($scope.clients[length].pubkey) +
                         ']',
                         recipient: $scope.currentUser,
-                        text: decryptedtext.plaintext
+                        text: plaintext
                     });
                     return;
                 }
@@ -90,7 +103,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
 
         $scope.messages.push({
             user: 'invalid sender (not in list)!',
-            text: decryptedtext.plaintext
+            text: plaintext
         });
 
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
