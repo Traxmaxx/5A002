@@ -24,11 +24,7 @@ function buildClientList() {
 }
 
 function buildUserList() {
-  var user_list = "";
-  for (var key in clients) {
-    user_list += clients[key].username + " ";
-  }
-  return user_list;
+  return Object.keys(clients).join(' ');
 }
 
 function userLoggedIn (username) {
