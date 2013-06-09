@@ -8,6 +8,9 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
     $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
 
     $scope.sendMessage = function () {
+        if (!$scope.clients[$scope.params.recipient])
+            return;
+
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
           rsa = rsaObj.parse(localStorageService.load('rsa')),
           msg = {};
@@ -17,7 +20,9 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
 
         socket.emit('send:message', {
             recipient: $scope.params.recipient,
-            message: cryptico.encrypt(JSON.stringify(msg), $scope.clients[$scope.params.recipient].pubkey, rsa).cipher
+            message: cryptico.encrypt(JSON.stringify(msg),
+                                      $scope.clients[$scope.params.recipient].pubkey,
+                                      rsa).cipher
         });
 
         if (!$scope.messages[$scope.params.recipient]) {
