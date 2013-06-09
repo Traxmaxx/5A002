@@ -98,6 +98,54 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
         delete data.clientlist[$rootScope.currentUser];
         $rootScope.clients = data.clientlist;
       });
+
+      socket.on('send:messagereply', function (data) {
+        console.log(data);
+      });
+
+      socket.on('recieve:message', function (data) {
+        var rsaObj = cryptico.generateRSAKey('', $rootScope.bitLength),
+            rsa = rsaObj.parse(localStorageService.load('rsa'));
+
+        var decryptedtext = cryptico.decrypt(data.message, rsa);
+        var msg = JSON.parse(decryptedtext.plaintext)
+        var plaintext = msg.text;
+        if (msg.user != data.sender) {
+          $rootScope.messages[msg.user].push({
+            user: msg.user + ' - server told it\'s ' + data.sender,
+            text: plaintext
+          });
+          return;
+        }
+
+        if ($rootScope.clients[data.sender]) {
+          if ($rootScope.clients[data.sender].pubkey !== decryptedtext.publicKeyString) {
+            $rootScope.messages[data.sender].push({
+              user: data.sender + ' - invalid signature ' +
+                  '(verification failed)!',
+              text: plaintext
+            });
+            return;
+          } else {
+            $rootScope.messages[data.sender].push({
+              user: data.sender +
+                  '[' +
+                  cryptico.publicKeyID($rootScope.clients[data.sender].pubkey) +
+                  ']',
+              recipient: $rootScope.currentUser,
+              text: plaintext
+            });
+            return;
+          }
+        }
+
+        $rootScope.messages[data.sender].push({
+          user: 'invalid sender (' + data.sender + ' is not in our list)!',
+          text: plaintext
+        });
+
+        //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
+      });
   });
 
 app.factory('socket', function ($rootScope) {
