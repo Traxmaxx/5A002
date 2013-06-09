@@ -4,7 +4,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     $scope.messages = [];
     $scope.clients = [];
     $scope.currentUser = localStorageService.load('username');
-    $scope.bitLength = 512
+    $scope.bitLength = 512;
 
     var connectSocket = function () {
         socket.emit('login', {
@@ -43,7 +43,7 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         });
 
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
-        $scope.text = '';
+        $('#message-input').val('');
     };
 
     socket.on('login:reply', function (data) {
@@ -109,34 +109,22 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         for (var key in orig_list) {
             if (!(key in updated_list)) {
                 $scope.messages.push({
-                    user: key +
-                    '[' +
-                    cryptico.publicKeyID(orig_list[key]) +
-                    ']',
-                    text: '[user logged out]'
+                    user: key,
+                    text: 'user logged out'
                 });
                 console.log(key + ' logged out');
             } else if (orig_list[key] != updated_list[key]) {
                 $scope.messages.push({
-                    user: key +
-                    '[' +
-                    cryptico.publicKeyID(orig_list[key]) +
-                    ' -> ' +
-                    cryptico.publicKeyID(updated_list[key]) +
-                    ']',
-                    text: '[user changed key]'
+                    user: key,
+                    text: 'user changed key from ' + cryptico.publicKeyID(orig_list[key]) + ' to ' + cryptico.publicKeyID(updated_list[key])
                 });
-                console.log(key + ' changed key');
             }
         }
         for (var key in updated_list) {
             if (!(key in orig_list)) {
                 $scope.messages.push({
-                    user: key +
-                    '[' +
-                    cryptico.publicKeyID(updated_list[key]) +
-                    ']',
-                    text: '[user logged in]'
+                    user: key,
+                    text: 'user logged in with ' + cryptico.publicKeyID(updated_list[key])
                 });
                 console.log(key + ' logged in');
             }
@@ -166,4 +154,12 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
     if ($scope.currentUser) {
         connectSocket();
     }
+
+    $('#message-input').keydown(function(event) {
+        if (event.keyCode == 13 && $scope.recipient) {
+          console.log($('#message-input').val());
+          $scope.sendMessage();
+          return false;
+        }
+    });
 });
