@@ -94,6 +94,7 @@ h2.chat-title a {
   font-size: 2rem;
   line-height: 3.2rem;
 }
+h2 small {font-size: 1.2rem;}
 
 
 ::-webkit-input-placeholder { /* WebKit browsers */

@@ -52,6 +52,8 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
       $rootScope.messages_read = {}; // per-sender number of read messages
       $rootScope.clients = {}; // hash table with peers
       $rootScope.params = $routeParams;
+      $rootScope.rsaObj = cryptico.generateRSAKey('', $rootScope.bitLength);
+      $rootScope.rsa = '';
 
       $rootScope.connectSocket = function () {
           socket.emit('login', {
@@ -77,6 +79,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
 
       $rootScope.$on('event:auth-successful', function () {
         $rootScope.currentUser = localStorageService.load('username');
+        $rootScope.rsa = $rootScope.rsaObj.parse(localStorageService.load('rsa'));
         $rootScope.connectSocket();
       });
 
@@ -129,10 +132,8 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
       });
 
       socket.on('recieve:message', function (data) {
-        var rsaObj = cryptico.generateRSAKey('', $rootScope.bitLength),
-            rsa = rsaObj.parse(localStorageService.load('rsa'));
-
-        var decryptedtext = cryptico.decrypt(data.message, rsa);
+        console.log($rootScope.rsa);
+        var decryptedtext = cryptico.decrypt(data.message, $rootScope.rsa);
         var msg = JSON.parse(decryptedtext.plaintext)
         var plaintext = msg.text;
         if (msg.user != data.sender) {
@@ -153,10 +154,7 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
             return;
           } else {
             $rootScope.messages[data.sender].push({
-              user: data.sender +
-                  '[' +
-                  cryptico.publicKeyID($rootScope.clients[data.sender].pubkey) +
-                  ']',
+              user: data.sender,
               recipient: $rootScope.currentUser,
               text: plaintext
             });
