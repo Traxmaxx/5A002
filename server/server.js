@@ -47,6 +47,12 @@ function userLoggedIn (username) {
   return false;
 }
 
+function broadcast (event, msg) {
+  for (var key in clients) {
+    clients[key].socket.emit(event, msg);
+  }
+}
+
 io.sockets.on('connection', function (socket) {
   // Recieve a login
   socket.on('login', function (data) {
@@ -78,7 +84,7 @@ io.sockets.on('connection', function (socket) {
     client_list2.clientlist = buildClientList();
 
     // Broadcast the new client
-    socket.broadcast.emit('client:update', client_list2);
+    broadcast('client:update', client_list2);
 
     log.info("'" + data.username + "' logged in.");
   });
@@ -122,7 +128,7 @@ io.sockets.on('connection', function (socket) {
       client_list = {};
       client_list.clientlist = buildClientList();
 
-      socket.broadcast.emit('client:update', client_list);
+      broadcast('client:update', client_list);
     }
   });
 
@@ -135,7 +141,7 @@ io.sockets.on('connection', function (socket) {
       client_list = {};
       client_list.clientlist = buildClientList();
 
-      socket.broadcast.emit('client:update', client_list);
+      broadcast('client:update', client_list);
     }
   });
 });
