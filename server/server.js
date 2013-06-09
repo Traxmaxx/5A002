@@ -103,6 +103,7 @@ io.sockets.on('connection', function (socket) {
       var client = clients[key];
       if (client.username == data.recipient) {
         client.socket.emit('recieve:message', msg);
+        log.info("'" + msg.sender + "' send a message to '" + data.recipient + "'");
       }
     }
 
@@ -110,8 +111,6 @@ io.sockets.on('connection', function (socket) {
     socket.emit('send:message', {
       status: "ok"
     });
-
-    log.info("'" + msg.sender + "' send a message to '" + data.recipient + "'");
   });
 
   // delete the client when it disconnects
