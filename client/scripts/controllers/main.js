@@ -149,6 +149,9 @@ app.controller('MainCtrl', function ($scope, socket, localStorageService) {
         $scope.clients.splice($scope.clients.indexOf(data), 1);
     });
 
+    socket.on('send:messagereply', function (data) {
+        console.log(data);
+    });
 
     //Connect on load if already loggedin
     if ($scope.currentUser) {
