@@ -151,7 +151,7 @@ input[type="submit"]:active {
 }
 main {
   background: #32393b;
-  height: 100%;
+  min-height: 100%;
   max-width: 960px;
   padding: 91px 10px 0 10px;
   width: 100%;
@@ -175,7 +175,8 @@ main .messages {
   color: #ccc;
   min-height: 100%;
   list-style: inside none;
-  padding: 0 0 160px 0;
+  overflow: hidden;
+  padding: 0 0 100px 0;
 }
 main .messages li {
   background: #4e575a;
@@ -188,9 +189,11 @@ main .messages li {
   line-height: 1.8rem;
   margin: 0 0 5px 0;
   padding: 8px 10px;
+  max-width: 100%;
 }
 main .messages li div {
   display: inline-block;
+  max-width: 100%;
 }
 main .messages li div.ss-icon {
   color: #5a6468;
@@ -201,8 +204,10 @@ main .messages li small {
   display: block;
 }
 main .messages li mark {
+  word-wrap: break-word;
   background: none;
   color: #fff;
+  max-width: 100%;
 }
 
 
