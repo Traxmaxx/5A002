@@ -28,7 +28,10 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-view></div>
+    <div class="container">
+        <h1>CESA <small data-ng-show="currentUser">Hej {{currentUser}} <a href="#" data-ng-click="logout()">Logout</a></small></h1>
+        <main ng-view></main>
+    </div>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script language="JavaScript" type="text/javascript" src="cryptico/jsbn.js"></script>
     <script language="JavaScript" type="text/javascript" src="cryptico/random.js"></script>
@@ -42,7 +45,9 @@
 
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/session.js"></script>
+    <script src="scripts/controllers/users.js"></script>
+    <script src="scripts/controllers/chat.js"></script>
     <!-- endbuild -->
   </body>
 </html>

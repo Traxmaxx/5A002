@@ -3,13 +3,45 @@
 var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+      .when('/chat:recipient', {
+        templateUrl: 'views/chat.html',
+        controller: 'ChatCtrl'
+      })
+      .when('/users', {
+        templateUrl: 'views/users.html',
+        controller: 'UsersCtrl'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'SessionCtrl'
       })
       .otherwise({
         redirectTo: '/'
       });
+  })
+  .run(function ($rootScope, localStorageService, socket, $location) {
+      $rootScope.currentUser = localStorageService.load('username');
+
+      $rootScope.connectSocket = function () {
+          socket.emit('login', {
+              username: localStorageService.load('username'),
+              pubkey: cryptico.publicKeyString(localStorageService.load('rsa'))
+          });
+      };
+
+      $rootScope.logout = function () {
+        localStorageService.destroy('username');
+        localStorageService.destroy('rsa');
+        $rootScope.currentUser = null;
+        socket.emit('logout', 'do it now!');
+      };
+
+      //Connect on load if already loggedin
+      if ($rootScope.currentUser) {
+        $rootScope.connectSocket();
+      } else {
+        $location.path('/login')
+      }
   });
 
 app.factory('socket', function ($rootScope) {
