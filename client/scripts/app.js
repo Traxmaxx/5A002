@@ -23,7 +23,7 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
       $rootScope.currentUser = localStorageService.load('username');
       $rootScope.bitLength = 512;
       $rootScope.messages = [];
-      $rootScope.clients = [];
+      $rootScope.clients = {};
       $rootScope.params = $routeParams;
 
       $rootScope.connectSocket = function () {
@@ -54,33 +54,29 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
 
       socket.on('client:update', function (data) {
         // First we check if a user has logged in/out or changed its key
-        var orig_list = {}
-        for (var i = 0; i < $rootScope.clients.length; i++)
-          orig_list[$rootScope.clients[i].username] = $rootScope.clients[i].pubkey;
-        var updated_list = {}
-        for (var i = 0; i < data.clientlist.length; i++) {
-          updated_list[data.clientlist[i].username] = data.clientlist[i].pubkey;
-          console.log(data.clientlist[i].username + ' is present');
-        }
-        for (var key in orig_list) {
-          if (!(key in updated_list)) {
+        for (var key in $rootScope.clients) {
+          if (!(key in data.clientlist)) {
             $rootScope.messages.push({
               user: key,
               text: 'user logged out'
             });
             console.log(key + ' logged out');
-          } else if (orig_list[key] != updated_list[key]) {
+          } else if ($rootScope.clients[key] != data.clientlist[key]) {
             $rootScope.messages.push({
               user: key,
-              text: 'user changed key from ' + cryptico.publicKeyID(orig_list[key]) + ' to ' + cryptico.publicKeyID(updated_list[key])
+              text: 'user changed key from ' +
+                  cryptico.publicKeyID($rootScope.clients[key]) +
+                  ' to '
+                  + cryptico.publicKeyID(data.clientlist[key])
             });
           }
         }
-        for (var key in updated_list) {
-          if (!(key in orig_list)) {
+        for (var key in data.clientlist) {
+          if (!(key in $rootScope.clients)) {
             $rootScope.messages.push({
               user: key,
-              text: 'user logged in with ' + cryptico.publicKeyID(updated_list[key])
+              text: 'user logged in with ' +
+                  cryptico.publicKeyID(data.clientlist[key])
             });
             console.log(key + ' logged in');
           }
