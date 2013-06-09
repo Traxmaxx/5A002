@@ -53,9 +53,9 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
       $rootScope.clients = {}; // hash table with peers
       $rootScope.params = $routeParams;
       $rootScope.rsaObj = cryptico.generateRSAKey('', $rootScope.bitLength);
-      $rootScope.rsa = '';
 
       $rootScope.connectSocket = function () {
+          $rootScope.rsa = $rootScope.rsaObj.parse(localStorageService.load('rsa'));
           socket.emit('login', {
               username: localStorageService.load('username'),
               pubkey: cryptico.publicKeyString(localStorageService.load('rsa'))
@@ -79,7 +79,6 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
 
       $rootScope.$on('event:auth-successful', function () {
         $rootScope.currentUser = localStorageService.load('username');
-        $rootScope.rsa = $rootScope.rsaObj.parse(localStorageService.load('rsa'));
         $rootScope.connectSocket();
       });
 
@@ -132,7 +131,6 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
       });
 
       socket.on('recieve:message', function (data) {
-        console.log($rootScope.rsa);
         var decryptedtext = cryptico.decrypt(data.message, $rootScope.rsa);
         var msg = JSON.parse(decryptedtext.plaintext)
         var plaintext = msg.text;
