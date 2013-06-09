@@ -21,12 +21,11 @@ io.set('log level', 1);
 var clients = {};
 
 function buildClientList() {
-  var client_list = [];
+  var client_list = {};
   for (var key in clients) {
-    client_list.push({
-      username: clients[key].username,
+    client_list[clients[key].username] = {
       pubkey: clients[key].pubkey
-    });
+    };
   }
   return client_list;
 }
@@ -86,6 +85,7 @@ io.sockets.on('connection', function (socket) {
 
   // Recieve a message
   socket.on('send:message', function (data) {
+    log.info('send:message: ' + JSON.stringify(data));
 
     if (clients[socket.id] === undefined) {
       socket.emit('send:messagereply', {
@@ -103,8 +103,9 @@ io.sockets.on('connection', function (socket) {
     // Send message to the specified user
     for (var key in clients) {
       var client = clients[key];
-      if (client.username == data.recipient.username) {
+      if (client.username == data.recipient) {
         client.socket.emit('recieve:message', msg);
+        log.info("'" + msg.sender + "' send a message to '" + data.recipient + "'");
       }
     }
 
@@ -112,8 +113,6 @@ io.sockets.on('connection', function (socket) {
     socket.emit('send:message', {
       status: "ok"
     });
-
-    log.info("'" + msg.sender + "' send a message to '" + data.recipient.username + "'");
   });
 
   // delete the client when it disconnects
