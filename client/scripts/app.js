@@ -201,3 +201,12 @@ app.filter('reverse', function() {
     return items.slice().reverse();
   };
 });
+
+app.filter('urlify', function() {
+  return function(text) {
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+      return '<a href="' + url + '">' + url + '</a>';
+    })
+  };
+});
