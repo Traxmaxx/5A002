@@ -110,8 +110,8 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
                   cryptico.publicKeyID(data.clientlist[key].pubkey)
             });
             console.log(key + ' logged in');
+            $rootScope.messages_read[key] = $rootScope.messages[key].length;
           }
-          $rootScope.messages_read[key] = $rootScope.messages[key].length;
         }
 
         delete data.clientlist[$rootScope.currentUser];
