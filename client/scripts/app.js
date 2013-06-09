@@ -16,7 +16,7 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
         controller: 'SessionCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/users'
       });
   })
   .run(function ($rootScope, localStorageService, socket, $location, $routeParams) {

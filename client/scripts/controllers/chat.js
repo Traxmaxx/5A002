@@ -4,9 +4,9 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
 
     $scope.sendMessage = function () {
         var rsaObj = cryptico.generateRSAKey('', $scope.bitLength),
-        rsa = rsaObj.parse(localStorageService.load('rsa'));
+          rsa = rsaObj.parse(localStorageService.load('rsa')),
+          msg = {};
 
-        var msg = {}
         msg.user = $scope.currentUser;
         msg.text = $scope.text;
 
