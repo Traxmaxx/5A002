@@ -105,31 +105,16 @@ main form {
   background: #32393b;
   bottom: 0px;
   left: 0px;
-  height: 100px;
+  height: 50px;
   padding: 0 0 10px 10px;
   position: absolute;
   width: 100%;
 }
-main textarea {
-  width: 65%;
+main #message-input {
+  width: 100%;
   height: 100%;
   border: 3px solid #cccccc;
   padding: 5px;
-}
-main .contact-action {
-  display: inline-block;
-  height: 100%;
-  position: relative;
-  width: 30%;
-}
-main .contact-action select {
-  display: block;
-  width: 100%;
-}
-main .contact-action input {
-  left: 0px;
-  position: absolute;
-  bottom: 0px;
 }
 
 main .messages {
