@@ -12,7 +12,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
 
         socket.emit('send:message', {
             recipient: $scope.params.recipient,
-            message: cryptico.encrypt(JSON.stringify(msg), $scope.clients[$scope.params.recipient], rsa).cipher
+            message: cryptico.encrypt(JSON.stringify(msg), $scope.clients[$scope.params.recipient].pubkey, rsa).cipher
         });
 
         $scope.messages.push({
@@ -49,7 +49,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
         }
 
         if ($scope.params.recipient == data.sender) {
-            if ($scope.clients[$scope.params.recipient] != decryptedtext.publicKeyString) {
+            if ($scope.clients[$scope.params.recipient].pubkey !== decryptedtext.publicKeyString) {
                 $scope.messages.push({
                     user: data.sender + ' - invalid signature ' +
                     '(verification failed)!',
@@ -60,7 +60,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
                 $scope.messages.push({
                     user: data.sender +
                     '[' +
-                    cryptico.publicKeyID($scope.clients[$scope.params.recipient]) +
+                    cryptico.publicKeyID($scope.clients[$scope.params.recipient].pubkey) +
                     ']',
                     recipient: $scope.currentUser,
                     text: plaintext
