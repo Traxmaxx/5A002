@@ -1,5 +1,9 @@
 'use strict';
 
+if (!("ontouchstart" in document.documentElement)) {
+  document.documentElement.className += " no-touch";
+}
+
 var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
   .config(function ($routeProvider) {
     $routeProvider
@@ -82,10 +86,12 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
           }
         }
 
+        delete data.clientlist[$rootScope.currentUser];
         $rootScope.clients = data.clientlist;
       });
 
       socket.on('login:reply', function (data) {
+        delete data.clientlist[$rootScope.currentUser];
         $rootScope.clients = data.clientlist;
       });
   });

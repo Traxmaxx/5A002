@@ -13,8 +13,10 @@ body {
   width: 100%;
 }
 a, a:visited {
-  color: #ccc;
+  color: #2f6fb6;
 }
+a:active {color: #ccc;}
+.no-touch a:hover {color: #ccc;}
 h1 {
   background: #292f31;
   border-bottom: 1px solid #474d4f;
@@ -39,6 +41,14 @@ h2 {
 h1 small {
   float: right;
   font-size: 1.4rem;
+}
+h2.chat-title {
+  text-align: center;
+}
+h2.chat-title a {
+  float: left;
+  font-size: 1.2rem;
+  line-height: 2rem;
 }
 
 
@@ -160,5 +170,32 @@ main .messages li mark {
   display: block;
   margin: 10px auto;
   padding: 5px 10px;
-  width: 100px;
+  width: 200px;
 }
+
+
+.users {
+  list-style: inside none;
+  margin: -10px;
+  padding: 0px;
+}
+
+.users li a {
+  color: #fff;
+  display: block;
+  font-size: 2rem;
+  text-decoration: none;
+  padding: 20px;
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+  width: 100%;
+}
+.users li a:active {
+  background: #2f6fb6;
+}
+.no-touch .users li a:hover {
+  background: #2f6fb6;
+}
+.users li + li {border-top: 1px solid #000;}
