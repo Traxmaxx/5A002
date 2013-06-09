@@ -8,6 +8,8 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
     $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
 
     $scope.sendMessage = function () {
+        $("html, body").animate({ scrollTop: $(document).height() }, 300);
+
         if (!$scope.clients[$scope.params.recipient])
             return;
 
