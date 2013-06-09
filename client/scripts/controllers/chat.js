@@ -26,19 +26,23 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
                                       $scope.rsa).cipher
         });
 
-        if (!$scope.messages[$scope.params.recipient]) {
+        if (!$scope.messages[$scope.params.recipient])
             $scope.messages[$scope.params.recipient] = [];
-            $scope.messages_read[$scope.params.recipient] = 0;
-        }
         $scope.messages[$scope.params.recipient].push({
             user: 'me',
             recipient: $scope.params.recipient,
             text: $scope.text
         });
 
+        console.log('updating read count for ' + $scope.params.recipient + ': ' + $scope.messages[$scope.params.recipient].length);
         $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
 
         //$('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         $('#message-input').val('');
     };
+
+    $scope.$on('event:message_received', function () {
+        $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
+    });
+
 });
