@@ -18,7 +18,9 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             message: cryptico.encrypt(JSON.stringify(msg), $scope.clients[$scope.params.recipient].pubkey, rsa).cipher
         });
 
-        $scope.messages.push({
+        if (!$scope.messages[$scope.params.recipient])
+            $scope.messages[$scope.params.recipient] = [];
+        $scope.messages[$scope.params.recipient].push({
             user: 'me',
             recipient: $scope.params.recipient,
             text: $scope.text
@@ -44,7 +46,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
         var msg = JSON.parse(decryptedtext.plaintext)
         var plaintext = msg.text;
         if (msg.user != data.sender) {
-            $scope.messages.push({
+            $scope.messages[msg.user].push({
                 user: msg.user + ' - server told it\'s ' + data.sender,
                 text: plaintext
             });
@@ -53,14 +55,14 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
 
         if ($scope.clients[data.sender]) {
             if ($scope.clients[data.sender].pubkey !== decryptedtext.publicKeyString) {
-                $scope.messages.push({
+                $scope.messages[data.sender].push({
                     user: data.sender + ' - invalid signature ' +
                     '(verification failed)!',
                     text: plaintext
                 });
                 return;
             } else {
-                $scope.messages.push({
+                $scope.messages[data.sender].push({
                     user: data.sender +
                     '[' +
                     cryptico.publicKeyID($scope.clients[data.sender].pubkey) +
@@ -72,7 +74,7 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
             }
         }
 
-        $scope.messages.push({
+        $scope.messages[data.sender].push({
             user: 'invalid sender (' + data.sender + ' is not in our list)!',
             text: plaintext
         });

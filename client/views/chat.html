@@ -5,7 +5,7 @@
 
 
 <ul class="messages" id="messages">
-    <li data-ng-repeat="message in messages | reverse" data-ng-class="message.user">
+    <li data-ng-repeat="(user, message) in messages[params.recipient]" data-ng-class="user">
         <small>{{message.user}}</small>
         <mark>{{message.text}}</mark>
     </li>

@@ -26,7 +26,7 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
   .run(function ($rootScope, localStorageService, socket, $location, $routeParams) {
       $rootScope.currentUser = localStorageService.load('username');
       $rootScope.bitLength = 512;
-      $rootScope.messages = [];
+      $rootScope.messages = {};
       $rootScope.clients = {};
       $rootScope.params = $routeParams;
 
@@ -59,14 +59,16 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
       socket.on('client:update', function (data) {
         // First we check if a user has logged in/out or changed its key
         for (var key in $rootScope.clients) {
+          if (!$rootScope.messages[key])
+            $rootScope.messages[key] = [];
           if (!(key in data.clientlist)) {
-            $rootScope.messages.push({
+            $rootScope.messages[key].push({
               user: key,
               text: 'user logged out'
             });
             console.log(key + ' logged out');
           } else if ($rootScope.clients[key].pubkey != data.clientlist[key].pubkey) {
-            $rootScope.messages.push({
+            $rootScope.messages[key].push({
               user: key,
               text: 'user changed key from ' +
                   cryptico.publicKeyID($rootScope.clients[key].pubkey) +
@@ -77,7 +79,9 @@ var app = angular.module('battlehackChatApp', ['ngResource', 'local-storage'])
         }
         for (var key in data.clientlist) {
           if (!(key in $rootScope.clients)) {
-            $rootScope.messages.push({
+            if (!$rootScope.messages[key])
+              $rootScope.messages[key] = [];
+            $rootScope.messages[key].push({
               user: key,
               text: 'user logged in with ' +
                   cryptico.publicKeyID(data.clientlist[key].pubkey)
