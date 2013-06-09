@@ -93,7 +93,6 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
               timestamp: new Date().getTime(),
               text: 'user logged out'
             });
-            console.log(key + ' logged out');
           } else if ($rootScope.clients[key].pubkey != data.clientlist[key].pubkey) {
             $rootScope.messages[key].push({
               user: key,
@@ -115,7 +114,6 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
               text: 'user logged in with ' +
                   cryptico.publicKeyID(data.clientlist[key].pubkey)
             });
-            console.log(key + ' logged in');
             $rootScope.messages_read[key] = $rootScope.messages[key].length;
           }
         }
@@ -129,9 +127,9 @@ var app = angular.module('battlehackChatApp', ['local-storage'])
         $rootScope.clients = data.clientlist;
       });
 
-      socket.on('send:messagereply', function (data) {
-        console.log(data);
-      });
+//      socket.on('send:messagereply', function (data) {
+//        console.log(data);
+//      });
 
       socket.on('recieve:message', function (data) {
         var decryptedtext = cryptico.decrypt(data.message, $rootScope.rsa);
@@ -204,12 +202,6 @@ app.factory('socket', function ($rootScope) {
   };
 });
 
-app.filter('reverse', function() {
-  return function(items) {
-    return items.slice().reverse();
-  };
-});
-
 app.filter('urlify', function() {
   return function(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -219,11 +211,18 @@ app.filter('urlify', function() {
   };
 });
 
+app.filter('timify', function() {
+  return function(ts) {
+    var date = new Date(ts);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  };
+});
+
 $.fn.isOnScreen = function(){
   var win = $(window);
   var viewport = {
-      top : win.scrollTop(),
-      left : win.scrollLeft()
+    top : win.scrollTop(),
+    left : win.scrollLeft()
   };
   viewport.right = viewport.left + win.width();
   viewport.bottom = viewport.top + win.height();
@@ -232,9 +231,3 @@ $.fn.isOnScreen = function(){
   bounds.bottom = bounds.top + this.outerHeight();
   return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
 };
-app.filter('timify', function() {
-  return function(ts) {
-    var date = new Date(ts);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-  };
-});
