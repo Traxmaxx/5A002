@@ -42,7 +42,11 @@ app.controller('ChatCtrl', function ($scope, socket, localStorageService) {
     };
 
     $scope.$on('event:message_received', function () {
+        //var move = ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ? true : false;
         $scope.messages_read[$scope.params.recipient] = $scope.messages[$scope.params.recipient].length;
+        if ($('.messages li:last-child').isOnScreen()) {
+            $("html, body").animate({ scrollTop: $(document).height() }, 300);
+        }
     });
 
 });
