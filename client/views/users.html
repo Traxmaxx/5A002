@@ -1,3 +1,8 @@
 <ul class="users">
-    <li data-ng-repeat="(name, client) in clients" class="user"><a data-ng-href="/#/chat/{{name}}"><span class="ss-icon">user</span> {{name}}</a></li>
+    <li data-ng-repeat="(name, client) in clients" class="user">
+    <a data-ng-href="/#/chat/{{name}}">
+        <span class="ss-icon">user</span>
+        {{name}} {{messages[name].length - messages_read[name]}}
+    </a>
+    </li>
 </ul>
