@@ -1,5 +1,5 @@
 <a data-ng-href="/#/users">Back</a>
-<h2>Messaging with {{clients[params.recipient].username}}</h2>
+<h2>Messaging with {{params.recipient}}</h2>
 <form ng-submit="sendMessage()" id="message-form">
     <input type="text" placeholder="lalala" data-ng-model="text" rows="20" cols="10" required id="message-input">
 </form>
