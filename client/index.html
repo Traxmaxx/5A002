@@ -18,31 +18,20 @@
     <script src="http://battlehack.nilsson.io/socket.io/socket.io.js"></script>
   </head>
   <body ng-app="battlehackChatApp" ontouchstart="">
-    <!--[if lt IE 7]>
-      <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-    <![endif]-->
-
-    <!--[if lt IE 9]>
-      <script src="components/es5-shim/es5-shim.js"></script>
-      <script src="components/json3/lib/json3.min.js"></script>
-    <![endif]-->
-
     <!-- Add your site or application content here -->
     <div class="container">
         <h1>CESA <small data-ng-show="currentUser">Hej {{currentUser}} <a href="#/login" data-ng-click="logout()" class="ss-icon logout">logout</a></small></h1>
         <main ng-view></main>
     </div>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script language="JavaScript" type="text/javascript" src="cryptico/jsbn.js"></script>
-    <script language="JavaScript" type="text/javascript" src="cryptico/random.js"></script>
-    <script language="JavaScript" type="text/javascript" src="cryptico/hash.js"></script>
-    <script language="JavaScript" type="text/javascript" src="cryptico/rsa.js"></script>
-    <script language="JavaScript" type="text/javascript" src="cryptico/aes.js"></script>
-    <script language="JavaScript" type="text/javascript" src="cryptico/api.js"></script>
+    <script language="JavaScript" type="text/javascript" src="cryptico/jsbn.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="cryptico/random.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="cryptico/hash.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="cryptico/rsa.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="cryptico/aes.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="cryptico/api.min.js"></script>
     <script src="components/symbolset.js"></script>
-    <script src="components/angular/angular.js"></script>
-    <script src="components/angular-resource/angular-resource.js"></script>
-    <script src="scripts/modules/local-storage.js"></script>
+    <script src="components/angular/angular.min.js"></script>
 
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>
