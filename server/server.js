@@ -85,8 +85,6 @@ io.sockets.on('connection', function (socket) {
 
   // Recieve a message
   socket.on('send:message', function (data) {
-    log.info('send:message: ' + JSON.stringify(data));
-
     if (clients[socket.id] === undefined) {
       socket.emit('send:messagereply', {
         status: "not_logged_in"
