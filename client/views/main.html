@@ -11,8 +11,8 @@
 
     <div data-ng-show="currentUser" class="chat-wrapper">
         <h2>Messages</h2>
-        <form ng-submit="sendMessage()">
-            <textarea placeholder="lalala" data-ng-model="text" rows="20" cols="10" required></textarea>
+        <form ng-submit="sendMessage()" id="message-form">
+            <textarea placeholder="lalala" data-ng-model="text" rows="20" cols="10" required id="message-input"></textarea>
             <div class="contact-action">
                 <select name="client" id="client-select" data-ng-model="recipient" data-ng-options="c.username for c in clients" required>
                     <option value="">Select a Recipient</option></select>
@@ -22,7 +22,7 @@
 
 
         <ul class="messages" id="messages">
-            <li data-ng-repeat="message in messages | reverse">{{message.user}} to {{message.recipient}}: <mark>{{message.text}}</mark> </li>
+            <li data-ng-repeat="message in messages | reverse">{{message.user}} <span data-ng-show="message.recipient">to</span> {{message.recipient}}: <mark>{{message.text}}</mark> </li>
         </ul>
     </div>
 </div>
